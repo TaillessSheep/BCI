@@ -1,0 +1,3 @@
+wall_E = legoev3('usb');
+
+leftMotor = motor(W)
