@@ -6,7 +6,8 @@
   - g.Nautilus Research
   - g.GAMMAcap2
 - Softwave:
-  - MATLAB with "MATLAB **Support Package** for LEGO MINDSTORMS EV3 Hardware"
+  - MATLAB 
+    - **Support Package**: LEGO MINDSTORMS EV3
 
 ### Tasks
 - [ ] Signal Acquisition (waiting for the softwave for the head set)
