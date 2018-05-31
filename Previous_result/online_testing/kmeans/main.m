@@ -5,11 +5,11 @@
 %
 % 
 clc; clear; close all; 
-cd ('C:\\Users\\Tim\\ownCloud\\Electrical Engineering\\summer_2017_project\\online_testing');
+cd ..;
 
 %% Initialize receiving data
 
-addpath(genpath('C:\\Users\\Tim\\Downloads\\liblsl-Matlab'))
+addpath('C:\\Users\\wi_cui\\Documents\\software\\liblsl-Matlab')
 %ReceiveData
 lib = lsl_loadlib();
 result = lsl_resolve_byprop(lib,'type','EEG');
