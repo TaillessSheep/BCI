@@ -14,6 +14,7 @@
 
 ### Tasks
 - [ ] Signal Acquisition (waiting for the softwave for the headset)
+  - [ ] Data transition between Python and MATLAB
 - [ ] Signal Processing
   - [ ] Signal Filtering
   - [ ] Signal Classification
