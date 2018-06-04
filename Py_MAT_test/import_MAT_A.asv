@@ -14,19 +14,19 @@ try
         try
             newData = load(fileName);
             delete 'pydata.mat';
-        catch ME
-            disp(ME)
+        catch
             disp('Troblem reading ''pydata.mat''.')
             pause(0.01);
         end
 
         y = wshift('1D',y,1);
-        y(length(time))=newData.data;
+        y(length(time))=newData.;
         plot(time,y);
         drawnow
+
+        test.pydata.check = false;
     end
-catch ME
-    disp(ME)
+catch 
     disp('Program ending~');
     delete 'pydata.mat';
 end
