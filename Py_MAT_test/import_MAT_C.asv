@@ -18,6 +18,8 @@ wait = 0;
 while(true)
     try
         load('pydata.mat');
+        disp('Data loaded');
+        disp(pydata.check);
         if pydata.check
             newData = pydata.data;
             wait = 0;
@@ -43,5 +45,5 @@ while(true)
     pydata.check = false;
     save('pydata.mat','-struct','pydata')
     clear pydata;
-    clear check;
+    clea
 end
