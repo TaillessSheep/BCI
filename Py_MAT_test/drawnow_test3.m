@@ -6,38 +6,22 @@ sig_magni_min = -2;
 time = (-(max_record-1):0);
 y = ones(1,max_record);
 
-cur  = ;
-last = cur;
 %%
 %%looping
 % plot(time,y);
 
 while(true)
     for x = (0:300)
-        disp('A');
-        cur = get(clock);
-        disp(cur - last);
-        last = cur;
+        
         y = wshift('1D',y,1);
-        disp('B');
-        cur = get(clock);
-        disp(cur - last);
-        last = cur;
+       
         y(length(y))=sin(2*pi*x/300);
-        disp('C');
-        cur = get(clock);
-        disp(cur - last);
-        last = cur;
+        disp(size(time));
+        disp(size(y));
         plot(time,y);
         axis([-(max_record-1) 0 sig_magni_min sig_magni_max]);
-        disp('D');
-        cur = get(clock);
-        disp(cur - last);
-        last = cur;
+        
         drawnow
-        disp('E');
-        cur = get(clock);
-        disp(cur - last);
-        last = cur;
+        
     end
 end
