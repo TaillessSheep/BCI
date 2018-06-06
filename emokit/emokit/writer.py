@@ -82,7 +82,6 @@ class EmotivWriter(object):
                         test = list(np.array(data_to_write.split(','))[list(range(1,29,2))])
                         print(test[1])
                         try:
-                            print(self.eng.workspace['test'])
                             self.eng.API_Py_1(matlab.double([np.double(test[1])]),nargout=0)
                         except:
                             print(sys.exc_info()[0])

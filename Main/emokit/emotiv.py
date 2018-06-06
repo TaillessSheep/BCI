@@ -26,7 +26,7 @@ class Emotiv(object):
     # TODO: Add a calibration mechanism, get a "noise average" per sensor or even a "noise pattern" to filter
     #       sensor values when processing packets received. Ideally this would be done not on someone's head.
     # TODO: Add filters for facial expressions, muscle contractions.
-    def __init__(self, eng, display_output=False, serial_number=None, is_research=False, write=False,
+    def __init__(self, eng, record = False, display_output=False, serial_number=None, is_research=False, write=False,
                  write_encrypted=False, write_decrypted=False, write_values=True, input_source="emotiv",
                  sys_platform=system_platform, verbose=False, output_path=None, chunk_writes=True, chunk_size=32,
                  force_epoc_mode=False, force_old_crypto=False):
@@ -52,6 +52,7 @@ class Emotiv(object):
         """
         print("Initializing Emokit...")
         self.eng = eng
+        self.record = record
         self.new_format = False
         self.running = False
         self.chunk_writes = chunk_writes
@@ -174,7 +175,7 @@ class Emotiv(object):
                 if self.output_path is not None:
                     if type(self.output_path) == str:
                         output_path = path_checker(self.output_path, output_path)
-                self.value_writer = EmotivWriter(self.eng, output_path, mode="csv", chunk_writes=self.chunk_writes,
+                self.value_writer = EmotivWriter(self.eng, output_path, self.record, mode="csv", chunk_writes=self.chunk_writes,
                                                  chunk_size=self.chunk_size)
                 # Make the first row in the file the header with the sensor name
                 self.value_writer.header_row = values_header

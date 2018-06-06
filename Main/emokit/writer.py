@@ -5,6 +5,7 @@ import numpy as np
 import matlab.engine
 from threading import Thread, Lock
 
+from .writer_func import export
 from .python_queue import Queue
 from .util import writer_task_to_line
 
@@ -15,7 +16,7 @@ class EmotivWriter(object):
     Write data from headset to output. CSV file for now.
     """
 
-    def __init__(self,eng, file_name, mode="csv", header_row=None, chunk_writes=True, chunk_size=32, verbose=False,
+    def __init__(self,eng, file_name, record = False, mode="csv", header_row=None, chunk_writes=True, chunk_size=32, verbose=False,
                  **kwargs):
         self.eng = eng
         self.mode = mode
@@ -32,6 +33,7 @@ class EmotivWriter(object):
         self._stop_signal = False
         self._stop_notified = False
         self.verbose = verbose
+        self.record = record
 
     def start(self):
         """
@@ -51,19 +53,20 @@ class EmotivWriter(object):
 
     def run(self, source=None):
         """Do not call explicitly, called upon initialization of class"""
-        if self.mode == "csv":
-            if sys.version_info >= (3, 0):
-                output_file = open(self.file_name, 'w', newline='')
-            else:
-                output_file = open(self.file_name, 'wb')
-            if self.header_row is not None:
-                if type(self.header_row) == str:
-                    output_file.write(self.header_row)
+        if(self.record):
+            if self.mode == "csv":
+                if sys.version_info >= (3, 0):
+                    output_file = open(self.file_name, 'w', newline='')
                 else:
-                    output_file.write(','.join(self.header_row) + '\n')
-
-        else:
-            output_file = None
+                    output_file = open(self.file_name, 'wb')
+                if self.header_row is not None:
+                    if type(self.header_row) == str:
+                        output_file.write(self.header_row)
+                    else:
+                        output_file.write(','.join(self.header_row) + '\n')
+    
+            else:
+                output_file = None
 
         data_buffer = None
         data_buffer_size = 1
@@ -79,14 +82,17 @@ class EmotivWriter(object):
                     next_task = self.data.get_nowait()
                     if next_task.is_values:
                         data_to_write = writer_task_to_line(next_task)
-                        test = list(np.array(data_to_write.split(','))[list(range(1,29,2))])
-                        print(test[1])
+                        #%% This is the block with all the extra juice added
                         try:
-                            print(self.eng.workspace['test'])
-                            self.eng.API_Py_1(matlab.double([np.double(test[1])]),nargout=0)
+                            data_value = list(np.array(data_to_write.split(','))[list(range(1,29,2))])
+#                            self.eng.API_Py_1(matlab.double([np.double(data_value[1])]),nargout=0)
+                            export(self.eng, data_value)
+                        except KeyboardInterrupt:
+                            raise
                         except:
                             print(sys.exc_info()[0])
                             print(sys.exc_info()[1])
+                        #%%
                     else:
                         if next_task.is_encrypted:
                             if sys.version_info >= (3, 0):
@@ -106,14 +112,16 @@ class EmotivWriter(object):
                                 data = ','.join([char for char in data])
                         data_to_write = ','.join([str(next_task.timestamp), data])
                         data_to_write += '\n'
-                    if data_buffer is not None:
-                        data_buffer.append(data_to_write)
-                        if len(data_buffer) >= data_buffer_size - 1:
-                            output_file.writelines(data_buffer)
-                            data_buffer = []
-                    else:
-                        output_file.write(data_to_write)
-                        print('ha')
+                    if(self.record):
+                        if data_buffer is not None:
+                            data_buffer.append(data_to_write)
+                            if len(data_buffer) >= data_buffer_size - 1:
+    #                            print('got it!')
+    #                            output_file.writelines(data_buffer)
+                                data_buffer = []
+                        else:
+                            output_file.write(data_to_write)
+                            print('ha')
 
             except Exception as ex:
                 if self.verbose:
@@ -140,3 +148,4 @@ class EmotivWriter(object):
         print("Writer stopped...")
         self.stopped = True
         return
+

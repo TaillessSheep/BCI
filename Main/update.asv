@@ -1,0 +1,20 @@
+function update(x)
+
+    global max time y figures titles;
+    
+    for i = (1:14)
+        y.(char(titles(i))) = wshift('1D',y.(char(titles(i))),1); % whift data by 1
+        y.(char(titles(i)))(max) = x(i);
+        if i < 8
+            figure(figures(1));
+            subplot(7, 1, i);
+            plot(time,y.(char(titles(i))));
+        else
+            figure(figures(2));
+            subplot(7, 1, i - 7);
+            plot(time,y.(char(titles(i))));
+        end
+    %     axis([x_min x_max y_min y_max]);
+        drawnow
+    end
+end
