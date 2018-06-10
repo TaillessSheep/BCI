@@ -15,10 +15,11 @@
   - MATLAB 
     - **Support Package**: LEGO MINDSTORMS EV3
     - **Matlab toolbox**: EEGLAB
+    - **API**: g.tech API (purchasing required)
 
 ### Tasks
 - [ ] Signal Acquisition 
-  - [ ] Softwave for the g.tech headset (waiting)
+  - [ ] Softwave for the g.tech headset 
   - [X] Data transition between Python and MATLAB (for EPOC+ headset)
 - [ ] Signal Processing
   - [ ] Signal Filtering
@@ -43,3 +44,5 @@
   - 06/05/2018: Data from the EPOC+ headset has **_successfull_** transfered to MATLAB, and plotted out with MATLAB. The communication is done with the Python-MATLAB API library (plan C from last note). _PNT_: 1. The communication done today was only for single channel, so need to extand the system to multi-channels; 2. Identify and delete the useless function in the emokit package; 3. Start looking into the actual signal processing part(now that the data is in MATLAB).
   
   - 06/06/2018: Data acquisition **_done_** of headset EPOC+. Last PNT_1 is done, and 2 partially done. _PNT_:Start looking into the actual signal processing part(last PNT_3).
+  
+  - 06/09/2018: The software for the g.tech headset is finally arrived. Basic data data acqusition is already understood. Currently working on formating the data for the convenience of later processing.
