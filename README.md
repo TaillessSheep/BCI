@@ -17,7 +17,7 @@
     - **Matlab toolbox**: EEGLAB
     - **API**: g.tech API (purchasing required)
 
-### Tasks
+## Tasks
 - [ ] Signal Acquisition 
   - [ ] Softwave for the g.tech headset 
   - [X] Data transition between Python and MATLAB (for EPOC+ headset)
@@ -46,3 +46,5 @@
   - 06/06/2018: Data acquisition **_done_** of headset EPOC+. Last PNT_1 is done, and 2 partially done. _PNT_:Start looking into the actual signal processing part(last PNT_3).
   
   - 06/09/2018: The software for the g.tech headset is finally arrived. Basic data data acqusition is already understood. Currently working on formating the data for the convenience of later processing.
+
+  - 06/21/2018: Summary of the past two weeks. Encounter sseveral issues: 1. The data recorded does not make sence(in time domain the data is just either a straight line or some smooth curve, nothing likes a EEG signal in time domain) 2. The MATLAB API from g.tec can not initiate data acqusition on my PC and laptop(the first computer used the API is Mahsa's PC, so could be a "no using on a second computer" issue). PNT: 1. We are sending a E-mail to the technical support in g.tec for both of the issue just mentioned; 2. Taking a closing look at the data we collected and see if we can figure anything.
