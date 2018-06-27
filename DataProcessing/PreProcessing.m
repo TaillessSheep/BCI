@@ -8,7 +8,7 @@ addpath([pwd '\Preprocessing_package'])
 load('data_set_IVa_aa.mat');
 cnt=0.1*double(cnt);
 %% Define the Filter here
-filt =MahsaFilter;
+filt = MahsaFilter;
 Nch=118;
 pos=mrk.pos;                                                       %moment which stimulation is started for each trial
 type=mrk.y;                                                          % in which trial which class is happend
