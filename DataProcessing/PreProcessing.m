@@ -1,9 +1,29 @@
-% Pre-Processing
-
+ %%%%%%%%%%%%%%%%% Pre-Processing%%%%%%%%%%%%%%%%%
 clc; clear; close all; 
+
 %% adding sub-folder
-addpath([pwd '\PreProcessing_package
-    
+addpath([pwd '\Preprocessing_package'])
+
+%% Loading DataSet
+load('data_set_IVa_aa.mat');
+cnt=0.1*double(cnt);
+%% Define the Filter here
+filt =MahsaFilter;
+Nch=118;
+pos=mrk.pos;                                                       %moment which stimulation is started for each trial
+type=mrk.y;                                                          % in which trial which class is happend
+
+train_set=zeros(118,3500,length(type)-sum(isnan(type)));
+test_set = zeros(118, 3500, sum(isnan(type)));
+
+
+% train=zeros(118,350,length(type)-sum(isnan(type)));
+% test = zeros(118, 350, sum(isnan(type)));
+label=[1,2];
+%% Split the DataSet for preparing in regards applying filter
+ %before starting the second one (3499) 
+ %transpose bec of the invers plate
+temp=pos(isnan(type));                                       %find isnan and it is my test
 for i=1:length(temp)
 test_set(:,:,i) = cnt(temp(i):temp(i)+3499,:)';    
 end
@@ -114,7 +134,7 @@ end
 %% Downsampling % we want to take each 10
 
 [ train, test ] = Simple_Downsampling( Wtrain_set, Wtest_set );
-save('Data_CHE64_WMA_AY.mat', 'test', 'train');
+save(['Data_CHE64_WMA_AY.mat'], 'test', 'train');
 
 %% Drawing The output after applying Downsampling
 
