@@ -15,7 +15,7 @@ type=mrk.y;                                                          % in which 
 
 train_set=zeros(118,3500,length(type)-sum(isnan(type)));
 test_set = zeros(118, 3500, sum(isnan(type)));
-
+disp('loaded')
 
 % train=zeros(118,350,length(type)-sum(isnan(type)));
 % test = zeros(118, 350, sum(isnan(type)));
@@ -51,6 +51,7 @@ end
 
 % save(['FilterCHE64_Dataset_al'], 'ftest_set', 'ftrain_set');      %Saving the Filter
 %% Drawing Initial TrainSet before applying Filter
+figure('name','Raw Data')
 W=mean(train_set,3);
 for kk=1:118
 A=fft(W(kk,:));
@@ -62,6 +63,7 @@ xlabel('Frequency (Hz)')
 xlim([2 100]);
 
 %% Drawing TrainSet after applying Filter
+figure('name','After Filtering')
 W=mean(ftrain_set,3);
 for jj=1:118
 A=fft(W(jj,:));
@@ -134,10 +136,10 @@ end
 %% Downsampling % we want to take each 10
 
 [ train, test ] = Simple_Downsampling( Wtrain_set, Wtest_set );
-save(['Data_CHE64_WMA_AY.mat'], 'test', 'train');
+save('Data_CHE64_WMA_AY.mat', 'test', 'train');
 
 %% Drawing The output after applying Downsampling
-
+figure('name','After Downsampling')
 W=mean(train,3);
 for kk=1:118
 A=fft(W(kk,:));
