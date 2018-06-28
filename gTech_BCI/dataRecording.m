@@ -8,14 +8,20 @@ clear;
 clc;
 
 %% Paramaters:
+% config setting
 samplingRate = 500; % sampling frequency
 bufferSize = 10;    % amount of samples (for each channel) matlab pull out from the headset
                     % common divisor of epochSample and breakSample
 
 trialNum = 10;      % need to be a multiple of the amount of classes
-epochDuration = 3;
+epochDuration = 3;  % durations are in seconds
 breakDuration = 1.5;
 
+BandpassIndex = 38;   
+NotchIndex = 3;
+SensitivityIndex = 6;
+
+% image loading
 imgLH = imread('LH.png');
 imgRH = imread('RH.png');
 imgC  = imread('C.png');
@@ -77,13 +83,13 @@ try
             gnautilus_config.Channels(1,i).Available = true;
             gnautilus_config.Channels(1,i).Acquire = true;
             % set sensitivity to 187.5 mV
-            gnautilus_config.Channels(1,i).Sensitivity = supported_sensitivities(6);
+            gnautilus_config.Channels(1,i).Sensitivity = supported_sensitivities(SensitivityIndex);
             % do not use channel for CAR and noise reduction
             gnautilus_config.Channels(1,i).UsedForNoiseReduction = false;
             gnautilus_config.Channels(1,i).UsedForCAR = false;
             % do not use filters
-            gnautilus_config.Channels(1,i).BandpassFilterIndex = 38;
-            gnautilus_config.Channels(1,i).NotchFilterIndex = 3;
+            gnautilus_config.Channels(1,i).BandpassFilterIndex = BandpassIndex; 
+            gnautilus_config.Channels(1,i).NotchFilterIndex = NotchIndex;
             % do not use a bipolar channel
             gnautilus_config.Channels(1,i).BipolarChannel = -1;
         end
