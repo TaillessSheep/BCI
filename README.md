@@ -15,7 +15,7 @@
   - MATLAB 
     - **Support Package**: LEGO MINDSTORMS EV3
     - **Matlab toolbox**: EEGLAB
-    - **API**: g.tech API (purchasing required)
+    - **API**: g.NEEDaccess MATLAB API *purchasing required; known compatible version of MATLAB: R2015 & R2017b(didn't test the rest)
 
 ## Tasks
 - [ ] Signal Acquisition 
@@ -47,4 +47,6 @@
   
   - 06/09/2018: The software for the g.tech headset is finally arrived. Basic data data acqusition is already understood. Currently working on formating the data for the convenience of later processing.
 
-  - 06/21/2018: Summary of the past two weeks. Encounter sseveral issues: 1. The data recorded does not make sence(in time domain the data is just either a straight line or some smooth curve, nothing likes a EEG signal in time domain) 2. The MATLAB API from g.tec can not initiate data acqusition on my PC and laptop(the first computer used the API is Mahsa's PC, so could be a "no using on a second computer" issue). PNT: 1. We are sending a E-mail to the technical support in g.tec for both of the issue just mentioned; 2. Taking a closing look at the data we collected and see if we can figure anything.
+  - 06/21/2018: Summary of the past two weeks. Encounter sseveral issues: 1. The data recorded does not make sence(in time domain the data is just either a straight line or some smooth curve, nothing likes a EEG signal in time domain) 2. The MATLAB API from g.tec can not initiate data acqusition on my PC and laptop(the first computer used the API is Mahsa's PC, so could be a "no using on a second computer" issue). _PNT_: 1. We are sending a E-mail to the technical support in g.tec for both of the issue just mentioned; 2. Taking a closing look at the data we collected and see if we can figure anything.
+  
+  - 06/27/2018: Got the basic processing algorithm from Mahsa. So far it is not performing very ideal. On the other hand, the g.NEEDaccess MATLAB API is not compatible with the latest version, R2018a, of MATLAB. The known compatible versions are R2015 and R2017b. The rest are not tested(don't know work or not, but I think it should be fine for all version between R2015 and R2017). The data display on the g.NEEDaccess - Demo Client after applying filter and notch seems pretty good for most of the channels with a few not showing anything. However, while using the MATLAB API, the data collected is a bit disappointing. For most of the channels, the data is just a smoth curve. Even for the channels that looks like a EEG, some how the data has a declining trend, which seem more like a backgroud noise. I believe this is due to the fact that there is more to know about the configuration on the API. _PNT_: Play with the configuration.
