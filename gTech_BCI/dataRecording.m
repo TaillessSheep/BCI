@@ -82,8 +82,8 @@ try
             gnautilus_config.Channels(1,i).UsedForNoiseReduction = false;
             gnautilus_config.Channels(1,i).UsedForCAR = false;
             % do not use filters
-            gnautilus_config.Channels(1,i).BandpassFilterIndex = -1;
-            gnautilus_config.Channels(1,i).NotchFilterIndex = -1;
+            gnautilus_config.Channels(1,i).BandpassFilterIndex = 38;
+            gnautilus_config.Channels(1,i).NotchFilterIndex = 3;
             % do not use a bipolar channel
             gnautilus_config.Channels(1,i).BipolarChannel = -1;
         end
@@ -172,7 +172,7 @@ try
     % user_profile = getenv('USERPROFILE');
     % dirname = sprintf('%s\\Documents\\MATLAB', user_profile);
     dirname = pwd;
-    filename = sprintf('%s\\data_received.mat', dirname);
+    filename = sprintf('%s\\data_received38.mat', dirname);
     % convert data to double for later use in g.BSanalyze
     data_received = double(data_received);
     % if folder exists save variable there, if not do not save
@@ -183,7 +183,17 @@ try
     clear gds_interface;
     clear gnautilus_config;
     disp('All done~');
-    clearvars -except data_received mark;
+    clearvars -except data_received mark sampleCurrent;
+    
+    %% ploting
+    rec_time = (1:double(sampleCurrent))/250;
+    for i = (1:8)
+        figure();
+        for j = (1:4)
+            subplot(4,1,j);
+            plot(rec_time, data_received(:,(i-1)*4+j));
+        end
+    end
     
 catch ME
     close all;

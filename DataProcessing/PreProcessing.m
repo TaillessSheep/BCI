@@ -13,8 +13,8 @@ Nch=118;
 pos=mrk.pos;                                                       %moment which stimulation is started for each trial
 type=mrk.y;                                                          % in which trial which class is happend
 
-train_set=zeros(118,3500,length(type)-sum(isnan(type)));
-test_set = zeros(118, 3500, sum(isnan(type)));
+Wtrain_set=zeros(118,3500,length(type)-sum(isnan(type)));
+Wtest_set = zeros(118, 3500, sum(isnan(type)));
 disp('loaded')
 
 % train=zeros(118,350,length(type)-sum(isnan(type)));
@@ -25,12 +25,12 @@ label=[1,2];
  %transpose bec of the invers plate
 temp=pos(isnan(type));                                       %find isnan and it is my test
 for i=1:length(temp)
-test_set(:,:,i) = cnt(temp(i):temp(i)+3499,:)';    
+Wtest_set(:,:,i) = cnt(temp(i):temp(i)+3499,:)';    
 end
 
 temp=pos(~isnan(type));                                     %find not isnan and it is my train
 for i=1:length(temp)
-train_set(:,:,i) = cnt(temp(i):temp(i)+3499,:)';
+Wtrain_set(:,:,i) = cnt(temp(i):temp(i)+3499,:)';
 end
 
 %% Hint:For each function we have to know what is the input(vector or matrix)
@@ -38,21 +38,21 @@ end
 % 1- using the filterdesigner/fdatool in command
 % 2- save the filter as a m file from File>> Generate Matlab code and Save as fdp file
 % 3- put the name of the filter at the first of the code
-for i = 1:size(train_set,3)
-    for j = 1:size(train_set,1)
-        ftrain_set(j,:,i) = filter(filt, train_set(j,:,i));
+for i = 1:size(Wtrain_set,3)
+    for j = 1:size(Wtrain_set,1)
+        ftrain_set(j,:,i) = filter(filt, Wtrain_set(j,:,i));
     end
 end
-for i = 1:size(test_set,3)
-    for j = 1:size(test_set,1)
-        ftest_set(j,:,i) = filter(filt, test_set(j,:,i));
+for i = 1:size(Wtest_set,3)
+    for j = 1:size(Wtest_set,1)
+        ftest_set(j,:,i) = filter(filt, Wtest_set(j,:,i));
     end
 end
 
 % save(['FilterCHE64_Dataset_al'], 'ftest_set', 'ftrain_set');      %Saving the Filter
 %% Drawing Initial TrainSet before applying Filter
 figure('name','Raw Data')
-W=mean(train_set,3);
+W=mean(Wtrain_set,3);
 for kk=1:118
 A=fft(W(kk,:));
 hold on
@@ -116,9 +116,9 @@ switch (ModeSmoothening)
        Wtest_set = ftest_set;
 
     case 1
-        [ train_set ,test_set ] = Moving_Median( ftrain_set, ftest_set);
+        [ Wtrain_set ,Wtest_set ] = Moving_Median( ftrain_set, ftest_set);
     case 2
-        [ train_set ,test_set ] = Simple_Moving_Average( WindowSize,ftrain_set,ftest_set );
+        [ Wtrain_set ,Wtest_set ] = Simple_Moving_Average( WindowSize,ftrain_set,ftest_set );
     case 3
         [ Wtrain_set ,Wtest_set ] = EXPWeighted_Moving_Average( WindowSize,ftrain_set,ftest_set );
 end
