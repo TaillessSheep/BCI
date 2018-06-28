@@ -17,7 +17,16 @@
     - **Matlab toolbox**: EEGLAB
     - **API**: g.NEEDaccess MATLAB API *purchasing required; known compatible version of MATLAB: R2015 & R2017b(didn't test the rest)
 
-## Tasks
+
+
+## Folder Description
+- Main:           The main code to execute the whole BCI system and some scripts that call functions from other folders
+- gTech_BCI:      Signal recording related MATLAB script
+- DataProcessing: Signal processing related MATLAB script
+- Materials:      Some good to know reading materials
+
+
+### Tasks
 - [ ] Signal Acquisition 
   - [ ] Softwave for the g.tech headset 
   - [X] Data transition between Python and MATLAB (for EPOC+ headset)
