@@ -3,7 +3,6 @@
 % The data is stored in both the workspace and a .mat file, both with the
 % name data_received
 
-
 clear;
 clc;
 
@@ -28,6 +27,7 @@ imgC  = imread('C.png');
 
 % name of the file storing the data
 filename = "data_received36_Jun28_B.mat";
+
 try
 %% Parameter Set up
     epochSample = epochDuration * samplingRate;
@@ -102,7 +102,7 @@ try
     disp('About to start!');
     gds_interface.SetConfiguration();
 
-%% Data Acquisition
+%% Data Acquisition Initiation
     
     % start data acquisition
     gds_interface.StartDataAcquisition();
@@ -119,11 +119,37 @@ try
     image(imgC);
     set(gcf, 'Position', get(0, 'Screensize'));
     drawnow();
-
+    
+%% Count Down & Buffer Clearing
+    tic;
+    pre = toc;
+    cur = toc;  
+    % wait for the inital garbage data to be cleared
+    for i = (0:-1:1)
+        while(cur - pre <= 1)
+            cur = toc;
+        end
+        pre = cur;
+    end
+    % count down
+    for i = (5:-1:0)
+        while(cur - pre <= 1)
+            cur = toc;
+            [scans_received_dum, data_dum] = gds_interface.GetData(0);
+        end
+        if i ~= 0
+            title(i);
+        else
+            title('FOR THE SAKE OF HUMANITY!!!');
+        end
+        pre = cur;
+    end
+    
+%% Recording
     mark = randGen(trialNum);
     sampleCurrent = 0;  % current sample index
     discard_count = 0;
-%%
+    
     for current_trial = (1:trialNum)
         % recording epoch
         mark(2,current_trial) = sampleCurrent + 1; % starting point of epoches in the second row
@@ -138,7 +164,7 @@ try
             drawnow();
             % read data
             try
-                [scans_received, data] = gds_interface.GetData(0);
+                [scans_received, data] = gds_interface.GetData(bufferSize);
                 data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
                 clear data;
             catch ME
@@ -157,7 +183,7 @@ try
             drawnow();
             % read data
             try
-                [scans_received, data] = gds_interface.GetData(0);
+                [scans_received, data] = gds_interface.GetData(bufferSize);
                 data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
                 clear data;
             catch ME

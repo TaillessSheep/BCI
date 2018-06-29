@@ -1,44 +1,72 @@
 % To record data
 
-%% preparation clearing out the buffer
-
+%% Count Down & Buffer Clearing
+tic;
 pre = toc;
 cur = toc;
 
+% count down
 for i = (5:-1:0)
-    while(cur - pre < 1)
+    while(cur - pre <= 1)
         cur = toc;
-        try
-            [scans_received_dum, data_dum] = gds_interface.GetData(8);
-        catch ME
-            disp(ME.message);
-            break;
-        end
+        [scans_received_dum, data_dum] = gds_interface.GetData(0);
     end
-    if i == 0
-        disp('for the sake of humanity!');
+    if i ~= 0
+        title(i);
     else
-        disp(i);
+        title('FOR THE SAKE OF HUMANITY!!!');
     end
     pre = cur;
 end
 
+%% Recording
+mark = randGen(trialNum);
+sampleCurrent = 0;  % current sample index
+discard_count = 0;
 
-%% starting recording
-samples_acquired = 0;
-% NOTE: the line below is for a 32-channel g.Nautilus device. If a 8-,
-% 16- or 64-channel is used the code below has to be changed to
-% 8-channel: data_received = single(zeros(2500, 10));
-% 16-channel: data_received = single(zeros(2500, 18));
-% 64-channel: data_received = single(zeros(2500, 66));
-data_received = single(zeros(5000, 34));
-while (samples_acquired < 5000)
-    try
-        [scans_received, data] = gds_interface.GetData(8);
-        data_received((samples_acquired + 1) : (samples_acquired + scans_received), :) = data;
-    catch ME
-        disp(ME.message);
-        break;
+for current_trial = (1:trialNum)
+    % recording epoch
+    mark(2,current_trial) = sampleCurrent + 1; % starting point of epoches in the second row
+    while sampleCurrent - mark(2,current_trial) + 1 < epochSample
+        
+        if mark(1,current_trial)
+            image(imgLH);
+        else
+            image(imgRH);
+        end
+        title(current_trial);
+        drawnow();
+        % read data
+        try
+            [scans_received, data] = gds_interface.GetData(bufferSize);
+            data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
+            clear data;
+        catch ME
+            disp(ME.message);
+            disp(ME.stack.line);
+            break;
+        end
+        sampleCurrent = sampleCurrent + scans_received;
     end
-    samples_acquired = samples_acquired + scans_received;
+    
+    % While recording break
+    mark(3,current_trial) = sampleCurrent + 1;  % starting porint of breaks in the third row
+    while sampleCurrent - mark(3,current_trial) + 1 < breakSample
+        
+        image(imgC);
+        drawnow();
+        % read data
+        try
+            [scans_received, data] = gds_interface.GetData(bufferSize);
+            data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
+            clear data;
+        catch ME
+            disp(ME.message);
+            disp(ME.stack.line);
+            break;
+        end
+        sampleCurrent = sampleCurrent + scans_received;
+    end
+    
 end
+close all;
