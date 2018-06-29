@@ -2,29 +2,11 @@
 
 %% preparation clearing out the buffer
 
-pre = toc;
-cur = toc;
-
-for i = (5:-1:0)
-    while(cur - pre < 1)
-        cur = toc;
-        try
-            [scans_received_dum, data_dum] = gds_interface.GetData(8);
-        catch ME
-            disp(ME.message);
-            break;
-        end
-    end
-    if i == 0
-        disp('for the sake of humanity!');
-    else
-        disp(i);
-    end
-    pre = cur;
-end
 
 
-%% starting recording
+
+
+%% starting 
 samples_acquired = 0;
 % NOTE: the line below is for a 32-channel g.Nautilus device. If a 8-,
 % 16- or 64-channel is used the code below has to be changed to
