@@ -54,6 +54,7 @@ for current_trial = (1:trialNum)
     while sampleCurrent - mark(3,current_trial) + 1 < breakSample
         
         image(imgC);
+        title(current_trial);
         drawnow();
         % read data
         try
