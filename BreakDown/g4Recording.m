@@ -6,8 +6,8 @@ samples_acquired = 0;
 % 8-channel: data_received = single(zeros(2500, 10));
 % 16-channel: data_received = single(zeros(2500, 18));
 % 64-channel: data_received = single(zeros(2500, 66));
-data_received = single(zeros(2500, 34));
-while (samples_acquired < 2500)
+data_received = single(zeros(5000, 34));
+while (samples_acquired < 5000)
     try
         [scans_received, data] = gds_interface.GetData(8);
         data_received((samples_acquired + 1) : (samples_acquired + scans_received), :) = data;

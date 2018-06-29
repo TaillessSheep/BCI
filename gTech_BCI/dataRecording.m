@@ -13,11 +13,11 @@ samplingRate = 500; % sampling frequency
 bufferSize = 10;    % amount of samples (for each channel) matlab pull out from the headset
                     % common divisor of epochSample and breakSample
 
-trialNum = 10;      % need to be a multiple of the amount of classes
+trialNum = 30;      % need to be a multiple of the amount of classes
 epochDuration = 3;  % durations are in seconds
 breakDuration = 1.5;
 
-BandpassIndex = 38;   
+BandpassIndex = 36;   
 NotchIndex = 3;
 SensitivityIndex = 6;
 
@@ -26,6 +26,8 @@ imgLH = imread('LH.png');
 imgRH = imread('RH.png');
 imgC  = imread('C.png');
 
+% name of the file storing the data
+filename = "data_received36_Jun28_B.mat";
 try
 %% Parameter Set up
     epochSample = epochDuration * samplingRate;
@@ -101,10 +103,7 @@ try
     gds_interface.SetConfiguration();
 
 %% Data Acquisition
-    close all;
-    image(imgC);
-    set(gcf, 'Position', get(0, 'Screensize'));
-    drawnow();
+    
     % start data acquisition
     gds_interface.StartDataAcquisition();
     % record data for 10 second and plot three channels (analog channel 1,
@@ -116,7 +115,10 @@ try
     % 16-channel: data_received = single(zeros(2500, 18));
     % 64-channel: data_received = single(zeros(2500, 66));
     data_received = single(zeros(totalSample,34));
-
+    close all;
+    image(imgC);
+    set(gcf, 'Position', get(0, 'Screensize'));
+    drawnow();
 
     mark = randGen(trialNum);
     sampleCurrent = 0;  % current sample index
@@ -132,6 +134,7 @@ try
             else
                 image(imgRH);
             end
+            title(current_trial);
             drawnow();
             % read data
             try
@@ -177,14 +180,15 @@ try
     % get user directory to save data in Documents/MATLAB folder
     % user_profile = getenv('USERPROFILE');
     % dirname = sprintf('%s\\Documents\\MATLAB', user_profile);
-    dirname = pwd;
-    filename = sprintf('%s\\data_received38.mat', dirname);
-    % convert data to double for later use in g.BSanalyze
-    data_received = double(data_received);
-    % if folder exists save variable there, if not do not save
-    if (exist(dirname,'dir') == 7)
-        save(filename, 'data_received');
-    end
+%     dirname = pwd;
+%     filename = sprintf('%s\\data_received36_Jun28_A.mat', dirname);
+%     % convert data to double for later use in g.BSanalyze
+%     data_received = double(data_received);
+%     % if folder exists save variable there, if not do not save
+%     if (exist(dirname,'dir') == 7)
+%         save(filename, 'data_received');
+%     end
+    save(filename,'data_received');
 
     clear gds_interface;
     clear gnautilus_config;
