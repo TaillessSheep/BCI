@@ -1,5 +1,5 @@
 % plot data (analog channel 1, counter and validation indicator)
-rec_time = (1:double(length(data_received)))/250;
+rec_time = (1:double(length(data_received)))/samplingRate;
 
 for i = (1:8)
     figure();

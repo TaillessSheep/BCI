@@ -133,15 +133,16 @@ try
     end
     % count down
     for i = (5:-1:0)
-        while(cur - pre <= 1)
-            cur = toc;
-            [scans_received_dum, data_dum] = gds_interface.GetData(0);
-        end
         if i ~= 0
             title(i);
         else
             title('FOR THE SAKE OF HUMANITY!!!');
         end
+        while(cur - pre <= 1)
+            cur = toc;
+            [scans_received_dum, data_dum] = gds_interface.GetData(0);
+        end
+        
         pre = cur;
     end
     
@@ -223,7 +224,7 @@ try
     clearvars -except data_received mark sampleCurrent;
     
     %% ploting
-    rec_time = (1:double(sampleCurrent))/250;
+    rec_time = (1:double(sampleCurrent))/samplingRate;
     for i = (1:8)
         figure();
         for j = (1:4)
