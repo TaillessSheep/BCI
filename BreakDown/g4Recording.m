@@ -30,8 +30,8 @@ tic;
 pre = toc;
 cur = toc;
 % count down
-for i = (5:-1:0)
-    if i ~= 0
+for i = (5:-1:-1)
+    if i > 0
         title(i);
     else
         title('FOR THE SAKE OF HUMANITY!!!');
@@ -40,7 +40,7 @@ for i = (5:-1:0)
         cur = toc;
         [scans_received_dum, data_dum] = gds_interface.GetData(0);
     end
-    
+    clear data_dum;
     pre = cur;
 end
 

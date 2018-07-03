@@ -12,7 +12,7 @@ samplingRate = 500; % sampling frequency
 bufferSize = 10;    % amount of samples (for each channel) matlab pull out from the headset
                     % common divisor of epochSample and breakSample
 
-trialNum = 30;      % need to be a multiple of the amount of classes
+trialNum = 10;      % need to be a multiple of the amount of classes
 epochDuration = 3;  % durations are in seconds
 breakDuration = 1.5;
 
@@ -124,23 +124,26 @@ try
     tic;
     pre = toc;
     cur = toc;  
+    test = single(zeros(10,34));
     % wait for the inital garbage data to be cleared
-    for i = (0:-1:1)
+    for i = (5:-1:1)
         while(cur - pre <= 1)
             cur = toc;
+            [scans_received, data] = gds_interface.GetData(0);
+            test = data;
         end
         pre = cur;
     end
     % count down
-    for i = (5:-1:0)
-        if i ~= 0
+    for i = (30:-1:-1)
+        if i > 0
             title(i);
         else
             title('FOR THE SAKE OF HUMANITY!!!');
         end
         while(cur - pre <= 1)
             cur = toc;
-            [scans_received_dum, data_dum] = gds_interface.GetData(0);
+            [scans_received, data] = gds_interface.GetData(0);
         end
         
         pre = cur;
@@ -221,9 +224,7 @@ try
     clear gds_interface;
     clear gnautilus_config;
     disp('All done~');
-    clearvars -except data_received mark sampleCurrent;
-    
-    %% ploting
+    % ploting
     rec_time = (1:double(sampleCurrent))/samplingRate;
     for i = (1:8)
         figure();
@@ -232,6 +233,9 @@ try
             plot(rec_time, data_received(:,(i-1)*4+j));
         end
     end
+%     clearvars -except data_received mark sampleCurrent;
+    
+    
     
 catch ME
     close all;

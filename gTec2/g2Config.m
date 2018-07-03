@@ -6,7 +6,7 @@ samplingRate = 500; % sampling frequency
 bufferSize = 10;    % amount of samples (for each channel) matlab pull out from the headset
 % common divisor of epochSample and breakSample
 
-trialNum = 30;      % need to be a multiple of the amount of classes
+trialNum = 10;      % need to be a multiple of the amount of classes
 epochDuration = 3;  % durations are in seconds
 breakDuration = 1.5;
 
