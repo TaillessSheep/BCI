@@ -121,21 +121,23 @@ try
     drawnow();
     
 %% Count Down & Buffer Clearing
+    sampleCurrent = 0;  % current sample index
     tic;
     pre = toc;
     cur = toc;  
     test = single(zeros(10,34));
     % wait for the inital garbage data to be cleared
-    for i = (5:-1:1)
+    for i = (20:-1:1)
         while(cur - pre <= 1)
             cur = toc;
             [scans_received, data] = gds_interface.GetData(0);
-            test = data;
+            data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
+            sampleCurrent = sampleCurrent + scans_received;
         end
         pre = cur;
     end
     % count down
-    for i = (30:-1:-1)
+    for i = (10:-1:-1)
         if i > 0
             title(i);
         else
@@ -144,19 +146,19 @@ try
         while(cur - pre <= 1)
             cur = toc;
             [scans_received, data] = gds_interface.GetData(0);
+            data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
+            sampleCurrent = sampleCurrent + scans_received;
         end
         
         pre = cur;
     end
-    
 %% Recording
     mark = randGen(trialNum);
-    sampleCurrent = 0;  % current sample index
-    discard_count = 0;
     
     for current_trial = (1:trialNum)
         % recording epoch
         mark(2,current_trial) = sampleCurrent + 1; % starting point of epoches in the second row
+        
         while sampleCurrent - mark(2,current_trial) + 1 < epochSample
             
             if mark(1,current_trial)
@@ -202,7 +204,7 @@ try
     end
     close all;
 %% stop data acquisition
-    disp('Recording done. Cleaning up the mess~')
+    disp('Recording done. Cleaning up the mess~');
 
     gds_interface.StopDataAcquisition();
 
@@ -219,18 +221,24 @@ try
 %     if (exist(dirname,'dir') == 7)
 %         save(filename, 'data_received');
 %     end
+
+    data_temp = data_received(mark(2,1):size(data_received,1),:);
+    clear data_received;
+    data_received = data_temp;
+
     save(filename,'data_received');
 
     clear gds_interface;
     clear gnautilus_config;
     disp('All done~');
     % ploting
-    rec_time = (1:double(sampleCurrent))/samplingRate;
+    rec_time = (1:double(size(data_received,1)))/samplingRate;
     for i = (1:8)
         figure();
         for j = (1:4)
             subplot(4,1,j);
             plot(rec_time, data_received(:,(i-1)*4+j));
+            title((i-1)*4+j);
         end
     end
 %     clearvars -except data_received mark sampleCurrent;
