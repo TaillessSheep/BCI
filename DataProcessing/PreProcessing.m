@@ -76,7 +76,7 @@ xlim([2 100]);
 
 %% Smoothening The dataset  % soft the outlier data for electords
 % load('FilterCHE64_Dataset_al');
-for i=1:size(ftest_set,3);
+for i=1:size(ftest_set,3)
     for j= 1:size(ftest_set,2)
         for k= 1:size(ftest_set,1)
             val=ftest_set(k,j,i);

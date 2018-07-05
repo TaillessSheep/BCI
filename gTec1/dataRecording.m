@@ -26,7 +26,11 @@ imgRH = imread('RH.png');
 imgC  = imread('C.png');
 
 % name of the file storing the data
-filename = "data_received36_Jun28_B.mat";
+disp('Name of the data file:');
+filename = input(prompt,'s');
+if filename == '0'
+    filename = "data.mat";
+end
 
 try
 %% Parameter Set up
