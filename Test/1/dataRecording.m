@@ -9,15 +9,15 @@ clc;
 %% Paramaters:
 % config setting
 samplingRate = 500; % sampling frequency
-bufferSize = 10;    % amount of samples (for each channel) matlab pull out from the headset
+bufferSize = 50;    % amount of samples (for each channel) matlab pull out from the headset
                     % common divisor of epochSample and breakSample
 
-trialNum = 10;      % need to be a multiple of the amount of classes
+trialNum = 40;      % need to be a multiple of the amount of classes
 epochDuration = 3;  % durations are in seconds
 breakDuration = 1.5;
 
-BandpassIndex = 36;   
-NotchIndex = 3;
+BandpassIndex = -1; % 47; % 36;   
+NotchIndex = -1; % 3;
 SensitivityIndex = 6;
 
 % image loading
@@ -26,11 +26,11 @@ imgRH = imread('RH.png');
 imgC  = imread('C.png');
 
 % name of the file storing the data
-disp('Name of the data file:');
-filename = input(prompt,'s');
-if filename == '0'
-    filename = "data.mat";
-end
+% filename = input('Name of the data file: ','s');
+% if filename == '0'
+%     filename = "data.mat";
+% end
+filename = 'Jul_6_no_no_B';
 
 try
 %% Parameter Set up
@@ -131,7 +131,7 @@ try
     cur = toc;  
     test = single(zeros(10,34));
     % wait for the inital garbage data to be cleared
-    for i = (20:-1:1)
+    for i = (5:-1:1)
         while(cur - pre <= 1)
             cur = toc;
             [scans_received, data] = gds_interface.GetData(0);
@@ -236,7 +236,7 @@ try
     clear gnautilus_config;
     disp('All done~');
     % ploting
-    rec_time = (1:double(size(data_received,1)))/samplingRate;
+    rec_time = (1:double(size(data_received,1)))/500; %samplingRate;
     for i = (1:8)
         figure();
         for j = (1:4)
@@ -245,7 +245,7 @@ try
             title((i-1)*4+j);
         end
     end
-%     clearvars -except data_received mark sampleCurrent;
+    clearvars -except data_received mark sampleCurrent;
     
     
     

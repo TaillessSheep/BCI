@@ -6,12 +6,12 @@ pre = toc;
 cur = toc;
 
 % count down
-for i = (5:-1:0)
+for i = (7:-1:-1)
     while(cur - pre <= 1)
         cur = toc;
         [scans_received_dum, data_dum] = gds_interface.GetData(0);
     end
-    if i ~= 0
+    if i > 0
         title(i);
     else
         title('FOR THE SAKE OF HUMANITY!!!');

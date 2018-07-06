@@ -3,16 +3,16 @@
 %% Paramaters:
 % config setting
 samplingRate = 500; % sampling frequency
-bufferSize = 10;    % amount of samples (for each channel) matlab pull out from the headset
+bufferSize = 50;    % amount of samples (for each channel) matlab pull out from the headset
 % common divisor of epochSample and breakSample
 
-trialNum = 10;      % need to be a multiple of the amount of classes
+trialNum = 6;      % need to be a multiple of the amount of classes
 epochDuration = 3;  % durations are in seconds
-breakDuration = 1.5;
+breakDuration = 2;
 
-BandpassIndex = 36;
+BandpassIndex = 47;
 NotchIndex = 3;
-SensitivityIndex = 6;
+SensitivityIndex = 1;
 
 % image loading
 imgLH = imread('LH.png');
