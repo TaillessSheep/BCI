@@ -1,46 +1,43 @@
-% This is a script to record EEG signal from g.Nautilus
-% MATLAB API
-% The data is stored in both the workspace and a .mat file, both with the
-% name data_received
+% This is a demo script for the use of g.Nautilus in the g.NEEDaccess
+% MATLAB API.
+% It records data for 10 seconds from all analog channels available and
+% stores the recorded data to a .mat file.
 
 clear;
 clc;
 
-%% Paramaters:
-% config setting
+%% -------------------------------------------------
+% Paramaters:
 samplingRate = 500; % sampling frequency
-bufferSize = 10;    % amount of samples (for each channel) matlab pull out from the headset
+bufferSize = 75;    % amount of samples (for each channel) matlab pull out from the headset
                     % common divisor of epochSample and breakSample
 
 trialNum = 10;      % need to be a multiple of the amount of classes
-epochDuration = 3;  % durations are in seconds
+epochDuration = 3;
 breakDuration = 1.5;
 
-BandpassIndex = 36;   
-NotchIndex = 3;
-SensitivityIndex = 6;
-
-% image loading
 imgLH = imread('LH.png');
 imgRH = imread('RH.png');
 imgC  = imread('C.png');
 
-% name of the file storing the data
-filename = input(prompt,'s');
-if filename == '0'
-filename = "data_received36_Jun28_B.mat";
-
 try
 %% Parameter Set up
+    
+    
+    
     epochSample = epochDuration * samplingRate;
     breakSample = breakDuration * samplingRate;
     trialSample = epochSample + breakSample;
     totalSample = trialNum * trialSample;
-    
+
+%     close all;
+%     image(imgC);
+%     set(gcf, 'Position', get(0, 'Screensize'));
+%     drawnow();
     %% gds_interface setup
     % create gtecDeviceInterface object
     gds_interface = gtecDeviceInterface();
-    
+disp('ha');
     % define connection settings (loopback)
     gds_interface.IPAddressHost = '127.0.0.1';
     gds_interface.IPAddressLocal = '127.0.0.1';
@@ -87,13 +84,13 @@ try
             gnautilus_config.Channels(1,i).Available = true;
             gnautilus_config.Channels(1,i).Acquire = true;
             % set sensitivity to 187.5 mV
-            gnautilus_config.Channels(1,i).Sensitivity = supported_sensitivities(SensitivityIndex);
+            gnautilus_config.Channels(1,i).Sensitivity = supported_sensitivities(6);
             % do not use channel for CAR and noise reduction
             gnautilus_config.Channels(1,i).UsedForNoiseReduction = false;
             gnautilus_config.Channels(1,i).UsedForCAR = false;
             % do not use filters
-            gnautilus_config.Channels(1,i).BandpassFilterIndex = BandpassIndex; 
-            gnautilus_config.Channels(1,i).NotchFilterIndex = NotchIndex;
+            gnautilus_config.Channels(1,i).BandpassFilterIndex = -1;
+            gnautilus_config.Channels(1,i).NotchFilterIndex = -1;
             % do not use a bipolar channel
             gnautilus_config.Channels(1,i).BipolarChannel = -1;
         end
@@ -101,11 +98,14 @@ try
     % apply configuration to the gds interface
     gds_interface.DeviceConfigurations = gnautilus_config;
     % set configuration provided in DeviceConfigurations
-    disp('About to start!');
+    disp('huh');
     gds_interface.SetConfiguration();
 
-%% Data Acquisition Initiation
-    
+%% Data Acquisition
+    close all;
+    image(imgC);
+    set(gcf, 'Position', get(0, 'Screensize'));
+    drawnow();
     % start data acquisition
     gds_interface.StartDataAcquisition();
     % record data for 10 second and plot three channels (analog channel 1,
@@ -117,97 +117,53 @@ try
     % 16-channel: data_received = single(zeros(2500, 18));
     % 64-channel: data_received = single(zeros(2500, 66));
     data_received = single(zeros(totalSample,34));
-    close all;
-    image(imgC);
-    set(gcf, 'Position', get(0, 'Screensize'));
-    drawnow();
-    
-%% Count Down & Buffer Clearing
-    sampleCurrent = 0;  % current sample index
-    tic;
-    pre = toc;
-    cur = toc;  
-    test = single(zeros(10,34));
-    % wait for the inital garbage data to be cleared
-    for i = (20:-1:1)
-        while(cur - pre <= 1)
-            cur = toc;
-            [scans_received, data] = gds_interface.GetData(0);
-            data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
-            sampleCurrent = sampleCurrent + scans_received;
-        end
-        pre = cur;
-    end
-    % count down
-    for i = (10:-1:-1)
-        if i > 0
-            title(i);
-        else
-            title('FOR THE SAKE OF HUMANITY!!!');
-        end
-        while(cur - pre <= 1)
-            cur = toc;
-            [scans_received, data] = gds_interface.GetData(0);
-            data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
-            sampleCurrent = sampleCurrent + scans_received;
-        end
-        
-        pre = cur;
-    end
-%% Recording
+
+
     mark = randGen(trialNum);
-    
+    sampleCurrent = 0;  % current sample index
+    sampleHistory = 0;  % starting sample index of the current trial
+    discard_count = 0;
+%%
     for current_trial = (1:trialNum)
-        % recording epoch
-        mark(2,current_trial) = sampleCurrent + 1; % starting point of epoches in the second row
-        
-        while sampleCurrent - mark(2,current_trial) + 1 < epochSample
-            
-            if mark(1,current_trial)
-                image(imgLH);
+        mark(2,current_trial) = sampleCurrent + 1;
+        while sampleCurrent - sampleHistory ~= trialSample
+            if sampleCurrent - sampleHistory < epochSample
+                if mark(1,current_trial)
+                    image(imgLH);
+                else
+                    image(imgRH);
+                end
             else
-                image(imgRH);
+                image(imgC);
             end
-            title(current_trial);
             drawnow();
             % read data
             try
-                [scans_received, data] = gds_interface.GetData(bufferSize);
-                data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
-                clear data;
+                [scans_received, data] = gds_interface.GetData(0);
+                if (scans_received > bufferSize)
+                    discard_count = discard_count + scans_received - bufferSize;
+                elseif (scans_received < bufferSize)
+                    msg = 'received: ' + string(scans_received);
+                    error(msg);
+                end
+                data_received((sampleCurrent + 1) : (sampleCurrent + bufferSize), :) = data(1:bufferSize,:);
+%                 clear data;
             catch ME
                 disp(ME.message);
                 disp(ME.stack.line);
                 break;
             end
-            sampleCurrent = sampleCurrent + scans_received;
+            sampleCurrent = sampleCurrent + bufferSize;
+%             if (scans_received ~= bufferSize)
+%                 msg = 'received: ' + string(scans_received);
+%                 error(msg);
+%             end
+%             sampleCurrent = sampleCurrent + bufferSize;
         end
-        
-        % While recording break
-        mark(3,current_trial) = sampleCurrent + 1;  % starting porint of breaks in the third row
-        while sampleCurrent - mark(3,current_trial) + 1 < breakSample
-            
-            image(imgC);
-            title(current_trial);
-            drawnow();
-            % read data
-            try
-                [scans_received, data] = gds_interface.GetData(bufferSize);
-                data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
-                clear data;
-            catch ME
-                disp(ME.message);
-                disp(ME.stack.line);
-                break;
-            end
-            sampleCurrent = sampleCurrent + scans_received;
-        end
-        
+        sampleHistory = sampleCurrent;
     end
     close all;
 %% stop data acquisition
-    disp('Recording done. Cleaning up the mess~');
-
     gds_interface.StopDataAcquisition();
 
     % clean up
@@ -215,44 +171,27 @@ try
     % get user directory to save data in Documents/MATLAB folder
     % user_profile = getenv('USERPROFILE');
     % dirname = sprintf('%s\\Documents\\MATLAB', user_profile);
-%     dirname = pwd;
-%     filename = sprintf('%s\\data_received36_Jun28_A.mat', dirname);
-%     % convert data to double for later use in g.BSanalyze
-%     data_received = double(data_received);
-%     % if folder exists save variable there, if not do not save
-%     if (exist(dirname,'dir') == 7)
-%         save(filename, 'data_received');
-%     end
-
-    data_temp = data_received(mark(2,1):size(data_received,1),:);
-    clear data_received;
-    data_received = data_temp;
-
-    save(filename,'data_received');
+    dirname = pwd;
+    filename = sprintf('%s\\data_received.mat', dirname);
+    % convert data to double for later use in g.BSanalyze
+    data_received = double(data_received);
+    % if folder exists save variable there, if not do not save
+    if (exist(dirname,'dir') == 7)
+        save(filename, 'data_received');
+    end
 
     clear gds_interface;
     clear gnautilus_config;
-    disp('All done~');
-    % ploting
-    rec_time = (1:double(size(data_received,1)))/samplingRate;
-    for i = (1:8)
-        figure();
-        for j = (1:4)
-            subplot(4,1,j);
-            plot(rec_time, data_received(:,(i-1)*4+j));
-            title((i-1)*4+j);
-        end
-    end
-%     clearvars -except data_received mark sampleCurrent;
-    
-    
+    disp('Data collection done~');
+    disp('Discarded data: ' + string(discard_count));
+    clearvars -except data_received mark;
     
 catch ME
-    close all;
     disp(ME.message);
     disp(ME.stack.line);
     gds_interface.StopDataAcquisition();
     delete(gds_interface);
     clear gds_interface;
     clear gnautilus_config;
+    close all;
 end
