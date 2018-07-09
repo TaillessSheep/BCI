@@ -62,4 +62,4 @@
   
   -06/28/2018: Finally figured out why we have been getting non-EEG signal. In the first few seconds after initiating the data acqusition, the signal is highly unstable and this covered the EEG signal. And since the sample code comes with the g.NEEDaccess MATLAB API starts the recording right after the data acqusition started, we've been having troble identify the issue. _PNT_: Modify the code by either adding a 10 seconds delay between acqusition initiation and recording, or breaking up the program to start the recording manually.
   
-  
+  -07/09/2018: Code for signal acquisition is done and tested. Collected some data from test subject. Also built an app template with MATLAB APP designer. Moving onto data preprocessing part and check the difference in the result between the filter we have been using and the filter comes with the headset. _PNT_: Study filters.
