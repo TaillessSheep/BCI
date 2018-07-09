@@ -7,7 +7,7 @@ clear;clc;
 % create time scope with 3 input channels, 250Hz sample rate and a buffer
 % length of 10 seconds (2500 samples per channel)
 scope_handle = dsp.TimeScope(3, 500, 'BufferLength', 25000,...
-    'TimeAxisLabels', 'Bottom', 'YLimits', [-1500 -500], 'TimeSpan', 10,...
+    'TimeAxisLabels', 'Bottom', 'YLimits', [-200 200], 'TimeSpan', 10,...
     'LayoutDimensions', [3,1], 'ReduceUpdates', true,...
     'YLabel', 'Amplitude [µV]');
 % switch to second axes object to change limit and label
@@ -132,7 +132,7 @@ while true % (samples_acquired < 10000)
     % 8-channel :  step(scope_handle, data(:,1),data(:,9),data(:,10));
     % 16-channel : step(scope_handle, data(:,1),data(:,17),data(:,18));
     % 64-channel : step(scope_handle, data(:,1),data(:,65),data(:,66));
-    step(scope_handle, data(:,22),data(:,33),data(:,34));
+    step(scope_handle, data(:,1),data(:,33),data(:,34));
     samples_acquired = samples_acquired + scans_received;
     catch
         break
