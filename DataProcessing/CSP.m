@@ -5,7 +5,7 @@ clc, clear all, close all;
 addpath([pwd '\CSP_package'])
 
 %% loading the dataset
-Data = load('Data_CHE64_WMA_AW');
+Data = load('Data_CHE64_WMA_AA');
 Train = Data.train;
 Test = Data.test;
 [TrCh,TrTime,TrTrial] = size(Train);
@@ -19,7 +19,7 @@ Test = Data.test;
 %     Test(:,:,i) = zscore(Test(:,:,i));
 % end
 %% loading the labels
-true_abels= load('true_labels_aw');
+true_abels= load('true_labels_aa');
 true_abels= true_abels.true_y;
 %% put all the Train and Test set together and define how many Train and Test we want to take
 Complete_Data(:,:,1:TrTrial) = Train;
@@ -53,7 +53,7 @@ for i= 1:Tr_C2
     cov_Train_Class2(:,:,i)=  (Train_Class2(:,:,i)*Train_Class2(:,:,i)')/trace(Train_Class2(:,:,i)*Train_Class2(:,:,i)');
     
 end
-%% averaging for the cov for each class
+%% averaging for the cov for each class  (why)
 tempp= cov_Train_Class1(:,:,1);
 for i= 2: Tr_C1
     tempp=tempp+ cov_Train_Class1(:,:,i);
@@ -67,6 +67,7 @@ end
 Ave_cov_Train_Class2= tempp/Tr_C2;
 
 %% We define the whitenning matrix base on 2 eigen value that we have     matrix=eig(c1+c2,c1)
+% (what)
 [V,D]=eig(Ave_cov_Train_Class1+Ave_cov_Train_Class2,Ave_cov_Train_Class1);
 Wn(:,1)=V(:,1);
 Wn(:,2)=V(:,end);
@@ -81,7 +82,7 @@ Wn(:,2)=V(:,end);
 % Wn(:,1:3)=V(:,1:3);
 % Wn(:,4:6)=V(:,end-2:end);
 
-%% we want to multiple the train and test matrix toe the Whiteing matrix
+%% we want to multiple the train and test matrix to the Whiteing matrix
 for i= 1:TrTrial
     Arg_Ft_Tr(:,:,i)=Wn'*Train(:,:,i)*Train(:,:,i)'*Wn;
     Ft_Tr(:,i)= log ((diag(Arg_Ft_Tr(:,:,i)))/trace(Arg_Ft_Tr(:,:,i)));
@@ -155,7 +156,7 @@ Accuracy_test(4,k) = count/TsTrial;
 
 end
 %%
-LDA_MAX_train=max(Accuracy_train(1,:));
+LDA_MAX_train = max(Accuracy_train(1,:));
 LDA_mean_train=mean(Accuracy_train(1,:));
 LDA_STD_Train = std2(Accuracy_train(1,:));
 LDA_MAX_TS=max(Accuracy_test(1,:));
