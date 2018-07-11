@@ -60,7 +60,7 @@ hold on
 end
 title('Initial Data(Signal) for Subject AA')
 xlabel('Frequency (Hz)')
-xlim([2 100]);
+% xlim([2 100]);
 
 %% Drawing TrainSet after applying Filter
 figure('name','After Filtering')
@@ -72,7 +72,7 @@ hold on
 end
 title('TrainSet of Subject AA by applying MFilter Chebyshev2 order64 FC 8~30')
 xlabel('Frequency (Hz)')
-xlim([2 100]);
+% xlim([2 100]);
 
 %% Smoothening The dataset  % soft the outlier data for electords
 % load('FilterCHE64_Dataset_al');
@@ -136,7 +136,7 @@ end
 %% Downsampling % we want to take each 10
 
 [ train, test ] = Simple_Downsampling( Wtrain_set, Wtest_set );
-save('Data_CHE64_WMA_AY.mat', 'test', 'train');
+% save('Data_CHE64_WMA_AY.mat', 'test', 'train');
 
 %% Drawing The output after applying Downsampling
 figure('name','After Downsampling')
@@ -148,4 +148,4 @@ hold on
 end
 title('Applying Downsampleing on train')
 xlabel('Frequency (Hz)')
-xlim([2 100]);
+% xlim([2 100]);
