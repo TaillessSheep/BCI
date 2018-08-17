@@ -6,8 +6,8 @@
 clear;clc;
 % create time scope with 3 input channels, 250Hz sample rate and a buffer
 % length of 10 seconds (2500 samples per channel)
-scope_handle = dsp.TimeScope(3, 500, 'BufferLength', 25000,...
-    'TimeAxisLabels', 'Bottom', 'YLimits', [-200 200], 'TimeSpan', 10,...
+scope_handle = dsp.TimeScope(3, 500, 'BufferLength', 10000,...
+    'TimeAxisLabels', 'Bottom', 'YLimits', [-100 100], 'TimeSpan', 10,...
     'LayoutDimensions', [3,1], 'ReduceUpdates', true,...
     'YLabel', 'Amplitude [µV]');
 % switch to second axes object to change limit and label
@@ -69,7 +69,7 @@ for i=1:size(gnautilus_config.Channels,2)
         gnautilus_config.Channels(1,i).UsedForNoiseReduction = false;
         gnautilus_config.Channels(1,i).UsedForCAR = false;
         % do not use filters
-        gnautilus_config.Channels(1,i).BandpassFilterIndex = 47;%36;
+        gnautilus_config.Channels(1,i).BandpassFilterIndex = 46;%36;
         gnautilus_config.Channels(1,i).NotchFilterIndex = 3;
         % do not use a bipolar channel
         gnautilus_config.Channels(1,i).BipolarChannel = -1;

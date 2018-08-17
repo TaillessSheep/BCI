@@ -45,6 +45,7 @@ end
 [~,~,Tr_C1] = size(Train_Class1);
 [~,~,Tr_C2] = size(Train_Class2);
 %% Determining cov for each classe
+% 
 for i= 1:Tr_C1
     cov_Train_Class1(:,:,i)= (Train_Class1(:,:,i)*Train_Class1(:,:,i)')/trace(Train_Class1(:,:,i)*Train_Class1(:,:,i)');
 end
@@ -140,7 +141,7 @@ for i = 1:TsTrial
     end
 end
 Accuracy_test(3,k) = count/TsTrial;
-%%%%%SWM
+%%%%%SVM
 [TrainedSVM, validationAccuracy4] = SVM_CSP_COV_2eigChe64WMA(Ft_Tr_Trainer);
 Accuracy_train(4,k) = validationAccuracy4;
 SVMfit = TrainedSVM.predictFcn(Ft_Ts');
@@ -155,31 +156,31 @@ end
 Accuracy_test(4,k) = count/TsTrial;
 
 end
-%%
+%% linear disccriminant analysis
 LDA_MAX_train = max(Accuracy_train(1,:));
 LDA_mean_train=mean(Accuracy_train(1,:));
 LDA_STD_Train = std2(Accuracy_train(1,:));
 LDA_MAX_TS=max(Accuracy_test(1,:));
 LDA_mean_TS=mean(Accuracy_test(1,:));
-%%
+%% Quadratic DA
 QDA_MAX_train=max(Accuracy_train(2,:));
 QDA_mean_train=mean(Accuracy_train(2,:));
 QDA_STD_Train = std2(Accuracy_train(2,:));
 QDA_MAX_TS=max(Accuracy_test(2,:));
 QDA_mean_TS=mean(Accuracy_test(2,:));
-%%
+%% linear regragation
 LR_MAX_train=max(Accuracy_train(3,:));
 LR_mean_train=mean(Accuracy_train(3,:));
 LR_STD_Train = std2(Accuracy_train(3,:));
 LR_MAX_TS=max(Accuracy_test(3,:));
 LR_mean_TS=mean(Accuracy_test(3,:));
 
-%%
-SWM_MAX_train=max(Accuracy_train(4,:));
-SWM_mean_train=mean(Accuracy_train(4,:));
-SWM_STD_Train = std2(Accuracy_train(4,:));
-SWM_MAX_TS=max(Accuracy_test(4,:));
-SWM_mean_TS=mean(Accuracy_test(4,:));
+%% Support vector machine
+SVM_MAX_train=max(Accuracy_train(4,:));
+SVM_mean_train=mean(Accuracy_train(4,:));
+SVM_STD_Train = std2(Accuracy_train(4,:));
+SVM_MAX_TS=max(Accuracy_test(4,:));
+SVM_mean_TS=mean(Accuracy_test(4,:));
 
 
 

@@ -3,12 +3,11 @@
 % the function first generate half of the array and then invert it to be
 % the second half
 
-function out = randGen(size)
-temp = size /2;
-t1 = randi([0 1], 1, temp);
+function out = randGen(size,class)
+temp = size /class;
 
-for i = (1:temp)
-    t2(i) = xor(t1(i),1);
+for i = (1:class)
+    t((i-1)*temp + 1:i*temp) = i;
 end
-    
-out = [t1 flip(t2)];
+
+out = datasample(t,size,'Replace',false);
