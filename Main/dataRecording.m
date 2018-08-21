@@ -8,18 +8,18 @@ clear;
 clc;
 
 %% Paramaters:
-filename = 'test';
+filename = 'Mahsa_Aug_17_18_test4';
 
 % config setting
 samplingRate = 500; % sampling frequency
 
 classNum = 4;       % amount of classes
-trialNum = 4;       % need to be a multiple of the amount of classes
+trialNum = 4;     % need to be a multiple of the amount of classes
 epochDuration = 5;  % durations are in seconds
 breakDuration = 3;
 
 BandpassIndex = -1; % 47; % 36;
-NotchIndex = -1; % 3;
+NotchIndex = -1;    % 3;
 SensitivityIndex = 6;
 
 % image loading
@@ -55,8 +55,8 @@ load configOptions;
 Description.classNum = classNum;
 Description.samplingRate = samplingRate;
 Description.trials = trialNum;
-Description.epcoh.duration = epochDuration;
-Description.epcoh.samples = epochSamples;
+Description.epoch.duration = epochDuration;
+Description.epoch.samples = epochSamples;
 Description.break.duration = breakDuration;
 Description.break.samples = breakSamples;
 if BandpassIndex == -1
