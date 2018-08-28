@@ -11,7 +11,7 @@ scope_handle = dsp.TimeScope(3, 500, 'BufferLength', 10000,...
     'LayoutDimensions', [3,1], 'ReduceUpdates', true,...
     'YLabel', 'Amplitude [µV]');
 % switch to second axes object to change limit and label
-set(scope_handle, 'ActiveDisplay', 2, 'YLimits', [0 2510], 'YLabel', 'Counter');
+set(scope_handle, 'ActiveDisplay', 2, 'YLimits', [0 32], 'YLabel', 'Counter');
 % switch to third axes object to change limit and label
 set(scope_handle, 'ActiveDisplay', 3, 'YLimits', [0 1], 'YLabel', 'Valid');
 
@@ -52,13 +52,13 @@ gnautilus_config.InputSignal = supported_input_sources(1).Value;
 gnautilus_config.NoiseReduction = false;
 gnautilus_config.CAR = false;
 % acquire additional channels counter and validation indicator
-gnautilus_config.Counter = true;
+gnautilus_config.Counter = false;
 gnautilus_config.ValidationIndicator = true;
 % do not acquire other additional channels
 gnautilus_config.AccelerationData = false;
 gnautilus_config.LinkQualityInformation = false;
 gnautilus_config.BatteryLevel = false;
-gnautilus_config.DigitalIOs = false;
+gnautilus_config.DigitalIOs = true;
 for i=1:size(gnautilus_config.Channels,2)
     if (available_channels(1,i))
     	gnautilus_config.Channels(1,i).Available = true;

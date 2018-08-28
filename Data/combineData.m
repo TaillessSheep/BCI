@@ -53,7 +53,7 @@ while exist(fileName, 'file')
     fileName = [name '_test' num2str(count) '.mat']; % name of file for next search
 end
 
-data_received = 0.1 * double(new_data);
+data_received = new_data;
 mark = new_mark;
 Description.trials = Cmark;
 disp(['Combining done! Combined ' num2str(count - 1) ' files in total.']);

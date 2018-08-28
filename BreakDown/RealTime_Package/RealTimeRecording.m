@@ -56,5 +56,5 @@ while true
 end
 
 data = data(started:started+samplingRate*duration-1 ,1:32);
-data = 0.1 * double;
+out = 0.1 * double(data);
 end

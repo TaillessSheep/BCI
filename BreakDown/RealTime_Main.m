@@ -26,5 +26,6 @@ while true
     temp = floor(temp);
     command = mod(temp,4) + 1;
     %% robot controlling
-    RobotControl(command);
+    disp(command);
+%     RobotControl(command);
 end
