@@ -3,7 +3,7 @@
 
 clc; clear; close all;
 %% parameters
-name = 'Will_Aug_27_18';
+name = 'Adam_8_8_18';
 
 NumCh = 32;
 NumTr = 300;
@@ -12,9 +12,9 @@ LabelOffset = 1;
 %% preparation
 addpath('../main');
 % names for different files
-prefix = [name '_']; % prefix for data files need to be read
-name_LF = [name '_Labels'];% name of label file
-name_DF = [name '_DataSet'];% name of data file(write)
+prefix = [name '_test']; % prefix for data files need to be read
+name_save = [name '_prepro'];% name of the file to save
+
 
 % look for all raw data file with the given prefix
 files = what('.');
@@ -45,7 +45,7 @@ for f = (1:dataFiles_num)
     L = L + length(Data_received(f).RAW);
     %% filtering
     Data_received(f).BPF = filtering(Data_received(f).RAW);
-    
+    LDAfit = TrainedLDA.predictFcn(Ft_Ts');
     %% Combining data
     DATA = cat(1,DATA,Data_received(f).BPF);
     
@@ -53,11 +53,11 @@ end
 
 %% Lables:
 Labels = SIP_Labels1 + LabelOffset;
-save(name_LF,'Labels');
+
 %% Defining DataSet
 % we should define duration of each epoch % here is 1000
 for i=1:length(Labels)
 DataSet(:,:,i) = DATA(POS(i):POS(i)+999,:)';    
 end
 data = DataSet(1:NumCh,:,:);
-save(name_DF, 'data');
+save(name_save, 'data', 'Labels');

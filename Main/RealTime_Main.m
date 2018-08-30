@@ -9,8 +9,8 @@ state.device = false; % device connection?
 state.acquisition = false; % data acquisition on?
 changeup = onCleanup(@CleanUp);
 %% parameters
-epochDuration = 3;
-classifierName = 'LDA2eigWill';
+epochDuration = 0.5;
+classifierName = 'Adam_8_8_18_classifer';
 
 % config setting
 samplingRate = 500; % sampling frequency
@@ -20,43 +20,42 @@ NotchIndex = -1;    % 3;
 SensitivityIndex = 6;
 
 %% preparation
-% add the path of the scrpts and fucntions used here
-addpath('./RealTime_Package');
-classifier = str2func(classifierName);
+epochSamples = epochDuration * samplingRate;
+
+load(classifierName);
 
 %% initiate the headset
 InitiateDevice;
+pause(3)
 
-try
-    while true
-        %% signal recording
-        data = RealTimeRecording(epochDuration);
-        
-        %% pre-processing
-%         mark = data(:,34);
-%         for i = ()
-%         data = filtering(data);
-        
-        
-        %% signal classifing
-        temp = data(1);
-        while temp <= 10
-            temp = temp * 10;
-        end
-        temp = floor(temp);
-        command = mod(temp,4) + 1;
-        %% robot controlling
-        disp(command);
-        %     RobotControl(command);
-        
-        %% a short break
-        pause(2)
-    end
-catch ME
-    disp('Ending')
-    gds_interface.StopDataAcquisition();
-    delete(gds_interface);
-    clear gds_interface;
-    clear gnautilus_config;
+while true
+    %% signal recording
+    [data, mark] = RealTimeRecording(epochDuration);
+    
+    %% pre-processing
+    data = 0.1*double(data);
+    data = filtering(data);
+    data = data(mark: mark+epochSamples-1, :);
+    data = data';
+    
+    %% signal classifing
+    Arg_Ft_Ts = Wn'*data * data'*Wn;
+    Ft_Ts= log ((diag(Arg_Ft_Ts))/trace(Arg_Ft_Ts));
+    fit = Classifier.predictFcn(Ft_Ts');
+    
+    %     disp(length(data))
+%     temp = data(1);
+%     while temp <= 10
+%         temp = temp * 10;
+%     end
+%     temp = floor(temp);
+%     command = mod(temp,4) + 1;
+    %% robot controlling
+    disp(fit);
+    %     RobotControl(command);
+    
+    %% a short break
+    pause(3)
 end
+
 end

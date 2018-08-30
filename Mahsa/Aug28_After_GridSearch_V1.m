@@ -1,19 +1,9 @@
 %% Using Best Option that we got and applying on Train and TestSet
 clc; clear; close all;
-numRand = 200;
+numRand = 400;
 for randTest = (1:numRand)
     disp(randTest)
-    %% loading the dataset
-    load('LabelsAdams.mat');
-    
-    load('DataSetAdams.mat');
-    [numCh,TmSm,numTr] = size(data);
-    
-    Trimming = 250;
-    TrTrial = 210;
-    TsTrial = numTr - TrTrial;
-    
-    
+
     % Shuffeling DataSet
     Random = randperm(numTr);
     Random = Random';
