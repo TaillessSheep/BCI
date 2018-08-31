@@ -3,11 +3,11 @@
 
 clc; clear; close all;
 %% parameters
-name = 'Adam_8_8_18';
+name = 'Mahsa_Aug_30_18';
 
 NumCh = 32;
-NumTr = 300;
-LabelOffset = 1;
+timeSample = 1500;
+LabelOffset = 0;
 
 %% preparation
 addpath('../main');
@@ -45,7 +45,7 @@ for f = (1:dataFiles_num)
     L = L + length(Data_received(f).RAW);
     %% filtering
     Data_received(f).BPF = filtering(Data_received(f).RAW);
-    LDAfit = TrainedLDA.predictFcn(Ft_Ts');
+
     %% Combining data
     DATA = cat(1,DATA,Data_received(f).BPF);
     
@@ -57,7 +57,8 @@ Labels = SIP_Labels1 + LabelOffset;
 %% Defining DataSet
 % we should define duration of each epoch % here is 1000
 for i=1:length(Labels)
-DataSet(:,:,i) = DATA(POS(i):POS(i)+999,:)';    
+DataSet(:,:,i) = DATA(POS(i):POS(i)+timeSample-1,:)';    
 end
 data = DataSet(1:NumCh,:,:);
 save(name_save, 'data', 'Labels');
+disp(['Done! Preprocessed ' num2str(dataFiles_num) ' files.']);

@@ -2,17 +2,17 @@
 clc; clear; close all;
 numRand = 200;
 
-name = 'Adam_8_8_18';
+name = 'Mahsa_Aug_30_18';
 %% loading the dataset
 name_prepro = [name '_prepro'];
 load(name_prepro);
 
-Trimming = 250;
-TrTrial = 300;
+Trimming = 1000;
+% TrTrial = 300;
 
 data = data(:,1:Trimming,:);
 
-[numCh,TmSm,numTr] = size(data);
+[numCh,TmSm,TrTrial] = size(data);
 
 
 
@@ -63,8 +63,8 @@ Ave_cov_Train_Class2= tempp/Tr_C2;
 %% We define the whitenning matrix base on 2 eigen value that we have     matrix=eig(c1+c2,c1)
 % base on 6 eigen value (4 stimulation)
 [V,D]=eig(Ave_cov_Train_Class1+Ave_cov_Train_Class2,Ave_cov_Train_Class1);
-Wn(:,1:3)=V(:,1:3);
-Wn(:,4:6)=V(:,end-2:end);
+    Wn(:,1:3)=V(:,1:3);
+    Wn(:,4:6)=V(:,end-2:end);
 
 %% we want to multiple the train and test matrix toe the Whiteing matrix
 for i= 1:TrTrial
@@ -77,4 +77,5 @@ Ft_Tr_Trainer= [ Ft_Tr;Labels]';
 %% Classification
 %LDA
 [Classifier, ~] = LDA_6Eig_V1(Ft_Tr_Trainer);
+disp('New classifier trained!')
 save(['../Classifiers/' name '_classifer'], 'Wn', 'Classifier')

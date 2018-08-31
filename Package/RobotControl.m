@@ -1,9 +1,11 @@
 
 function RobotControl(command)
-wall_e = legoev3('usb');
+global leftMotor rightMotor wall_e
+
 
 leftMotor = motor(wall_e,'D');
 rightMotor = motor(wall_e,'C');
+changeup = onCleanup(@CleanUp_Robot);
 resetRotation(leftMotor);
 resetRotation(rightMotor);
 
@@ -29,6 +31,7 @@ start(leftMotor, LS);
 start(rightMotor, RS);
 L = true;
 R = true;
+
 while L || R
     if (abs(readRotation(leftMotor)) >= 390)
         stop (leftMotor);
@@ -43,6 +46,5 @@ end
 
 stop (leftMotor);
 stop (rightMotor);
-disp(readRotation(leftMotor))
-disp(readRotation(rightMotor))
+
 end

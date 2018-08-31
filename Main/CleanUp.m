@@ -1,5 +1,5 @@
 % clean up scrpt
-global state gds_interface
+global state gds_interface wall_e
 disp('Program terminated. Cleaning up.')
 if state.acquisition
     gds_interface.StopDataAcquisition();
@@ -11,5 +11,9 @@ if state.device
     disp('Device disconnected.')
 end
 
+try 
+    delete(wall_e);
+catch
+end
 clear gds_interface;
 clear gnautilus_config;

@@ -4,13 +4,13 @@
 function RealTime_Main()
 close all; clear; clc;
 % a state variable for clean up script to use
-global state
+global state wall_e
 state.device = false; % device connection?
 state.acquisition = false; % data acquisition on?
 changeup = onCleanup(@CleanUp);
 %% parameters
-epochDuration = 0.5;
-classifierName = 'Adam_8_8_18_classifer';
+epochDuration = 2;
+classifierName = 'Mahsa_Aug_30_18_classifer';
 
 % config setting
 samplingRate = 500; % sampling frequency
@@ -21,17 +21,20 @@ SensitivityIndex = 6;
 
 %% preparation
 epochSamples = epochDuration * samplingRate;
-
+% wall_e = legoev3('usb');
 load(classifierName);
 
 %% initiate the headset
 InitiateDevice;
 pause(3)
-
-while true
+Ones = 0;
+Total = 0;
+for k=1
+    Total = Total + 1;
     %% signal recording
+    disp('Entered the for loop')
     [data, mark] = RealTimeRecording(epochDuration);
-    
+    disp('Data captured')
     %% pre-processing
     data = 0.1*double(data);
     data = filtering(data);
@@ -41,21 +44,22 @@ while true
     %% signal classifing
     Arg_Ft_Ts = Wn'*data * data'*Wn;
     Ft_Ts= log ((diag(Arg_Ft_Ts))/trace(Arg_Ft_Ts));
-    fit = Classifier.predictFcn(Ft_Ts');
-    
-    %     disp(length(data))
-%     temp = data(1);
-%     while temp <= 10
-%         temp = temp * 10;
-%     end
-%     temp = floor(temp);
-%     command = mod(temp,4) + 1;
+    command = Classifier.predictFcn(Ft_Ts');
+    disp('Classification done')
+    if command == 1
+        Ones = Ones + 1;
+    end
+%     command = command + 1; % to adopt to two classes
     %% robot controlling
-    disp(fit);
-    %     RobotControl(command);
+    
+    disp([num2str(Total) ': ' num2str(Ones/Total)]); 
+    
+    disp(command);
+%     RobotControl(command);
     
     %% a short break
-    pause(3)
+    pause(2)
+
 end
 
 end

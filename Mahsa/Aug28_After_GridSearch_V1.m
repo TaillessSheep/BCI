@@ -3,7 +3,14 @@ clc; clear; close all;
 numRand = 400;
 for randTest = (1:numRand)
     disp(randTest)
-
+    load('Adam_8_8_18_prepro.mat');
+    
+    [numCh,TmSm,numTr] = size(data);
+    
+    Trimming = 250;
+    TrTrial = 210;
+    TsTrial = numTr - TrTrial;
+    
     % Shuffeling DataSet
     Random = randperm(numTr);
     Random = Random';

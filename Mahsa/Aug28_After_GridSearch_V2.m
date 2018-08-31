@@ -1,19 +1,17 @@
 %% Using Best Option that we got and applying on Train and TestSet
 clc; clear; close all;
 numRand = 200;
-Final_inc = 0;
-load('Adam_8_8_18_prepro.mat');
+load('Mahsa_Aug_30_18_prepro');
 
 [numCh,TmSm,numTr] = size(data);
 
 Trimming = 250;
 TrTrial = 210;
 TsTrial = numTr - TrTrial;
+disp(numTr)
+
 for randTest = (1:numRand)
     disp(randTest)
-    %% loading the dataset
-    
-    
     
     % Shuffeling DataSet
     Random = randperm(numTr);
@@ -27,6 +25,27 @@ for randTest = (1:numRand)
     Test = zeros(numCh,Trimming,TsTrial);
     Test(:,:,:) = data(:,1:Trimming,(Random(TrTrial+1:end)));
     Test_lable = Labels(Random(TrTrial+1:end));
+    
+    %% Testing for making sure that shuffeling is currect
+    % count = 0;
+    % for i = (1:TrTrial)
+    %     if Labels(Random(i)) == Train_lable(i)
+    %         count = count + 1;
+    %     end
+    % end
+    % if (count ~= TrTrial)
+    %     error('Labels not match in Trial set');
+    % end
+    %
+    % count = 0;
+    % for i = (1:TsTrial)
+    %     if Labels(Random(TrTrial+i)) == Test_lable(i)
+    %         count = count + 1;
+    %     end
+    % end
+    % if (count ~= TsTrial)
+    %     error('Labels not match in Test set');
+    % end
     
     %% asigning labels to the data(split the TrainSet in two part to define different class
     Train_Class1 = zeros(numCh,Trimming);
@@ -94,39 +113,18 @@ for randTest = (1:numRand)
     
     %% Classification
     %LDA
-    [TrainedLDA, ~] =LDA_6Eig_V1(Ft_Tr_Trainer);
-    [TrainedQDA, ~] =QDA_6Eig_V1(Ft_Tr_Trainer);
-    [TrainedSVM, ~] =SVM_6Eig_V1(Ft_Tr_Trainer);
-    
+    [TrainedLDA, validationAccuracy1] =LDA_6Eig_V1(Ft_Tr_Trainer);
+    Accuracy_train=validationAccuracy1;
     LDAfit = TrainedLDA.predictFcn(Ft_Ts');
-    QDAfit = TrainedQDA.predictFcn(Ft_Ts');
-    SVMfit = TrainedSVM.predictFcn(Ft_Ts');
-    
-    
-    
     count = 0;
-    count2 = 0;
-    count3 = 0;
+    
     for i = 1:TsTrial
-        temp = round((LDAfit(i)+QDAfit(i)+SVMfit(i))/3);
-        if temp == Test_lable(i)
+        if LDAfit(i,1) == Test_lable(i)
             count = count + 1;
         end
-        if (LDAfit(i) == QDAfit(i) && QDAfit(i) == SVMfit(i))
-            count2 = count2 + 1;
-        end
-        if (LDAfit(i) == Test_lable(i))
-            count3 = count3 + 1;
-        end
     end
-    Final_count2(randTest) = count2;
-    Final_count3(randTest) = count3/TsTrial;
+    
     Final_Accuracy_test(randTest)= count/TsTrial;
-    if (Final_Accuracy_test(randTest)>Final_count3(randTest))
-        Final_inc = Final_inc + 1;
-    end
 end
 Final_mean_Test = mean(Final_Accuracy_test);
 Final_STD_Test = std2(Final_Accuracy_test);
-Final_count2_ave = mean(Final_count2);
-Final_count3_ave = mean(Final_count3);
