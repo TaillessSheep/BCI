@@ -3,10 +3,10 @@
 
 clc; clear; close all;
 %% parameters
-name = 'Mahsa_Aug_30_18';
+name = 'Will_Aug_27_18';
 
 NumCh = 32;
-timeSample = 1500;
+timeSample = 2500;
 LabelOffset = 0;
 
 %% preparation
@@ -43,6 +43,7 @@ for f = (1:dataFiles_num)
     POS = cat(2,POS,mark(2,:) + L);
     SIP_Labels1 = cat(2,SIP_Labels1,mark(1,:));
     L = L + length(Data_received(f).RAW);
+    
     %% filtering
     Data_received(f).BPF = filtering(Data_received(f).RAW);
 
@@ -62,3 +63,4 @@ end
 data = DataSet(1:NumCh,:,:);
 save(name_save, 'data', 'Labels');
 disp(['Done! Preprocessed ' num2str(dataFiles_num) ' files.']);
+

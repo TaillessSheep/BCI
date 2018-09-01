@@ -34,7 +34,7 @@ SensitivityIndex = 6;
 
 img(1).file = imread('C2_LH.png');  img(1).name = 'LeftHand_4C';
 img(2).file = imread('C2_RH.png');  img(2).name = 'RightHand_4C';
-img(5).file = imread('C.png');      img(5).name = 'C';
+img(3).file = imread('C.png');      img(3).name = 'C';
 
 
 %% check validation of parameters

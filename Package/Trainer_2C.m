@@ -1,21 +1,17 @@
 %% Using Best Option that we got and applying on data and TestSet
 clc; clear; close all;
-numRand = 200;
 
-name = 'Mahsa_Aug_30_18';
+name = 'Will_Aug_27_18';
 %% loading the dataset
-name_prepro = [name '_prepro'];
+name_prepro = [name '_prepro12'];
 load(name_prepro);
 
-Trimming = 1000;
+Trimming = 150;
 % TrTrial = 300;
 
 data = data(:,1:Trimming,:);
 
 [numCh,TmSm,TrTrial] = size(data);
-
-
-
 
 %% asigning labels to the data(split the TrainSet in two part to define different class
 Train_Class1 = zeros(numCh,Trimming);

@@ -3,7 +3,7 @@
 % This function will return a matrix of data with the specified duration(in
 % seconds) from the argument (default as 2 seconds)
 
-function [out_data, mark] = RealTimeRecording(duration)
+function [out_data, mark] = RealTimeRecording(duration,To)
 
 global state
 state.device = true; % device connection?
@@ -27,6 +27,7 @@ end
 end
 
 image(imgC);
+title(To)
 started = 0;
 currentSample = 0;
 while true
@@ -53,8 +54,9 @@ while true
     end
     
     if started && currentSample - started >= samplingRate * duration;
-        
+
         image(imgBlank);
+        title(To)
         break
     end
 end

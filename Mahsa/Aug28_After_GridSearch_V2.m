@@ -1,14 +1,15 @@
 %% Using Best Option that we got and applying on Train and TestSet
 clc; clear; close all;
 numRand = 200;
-load('Mahsa_Aug_30_18_prepro');
+load('Will_Aug_27_18_prepro12');
 
 [numCh,TmSm,numTr] = size(data);
 
 Trimming = 250;
-TrTrial = 210;
+TrTrial = 140;
 TsTrial = numTr - TrTrial;
-disp(numTr)
+
+overall = 1;
 
 for randTest = (1:numRand)
     disp(randTest)
@@ -115,16 +116,41 @@ for randTest = (1:numRand)
     %LDA
     [TrainedLDA, validationAccuracy1] =LDA_6Eig_V1(Ft_Tr_Trainer);
     Accuracy_train=validationAccuracy1;
-    LDAfit = TrainedLDA.predictFcn(Ft_Ts');
+    [LDAfit, p_t,~] = TrainedLDA.predictFcn(Ft_Ts');
     count = 0;
     
+    Final_p(randTest).count = 0;
+    
     for i = 1:TsTrial
+        p(i) = p_t(i,LDAfit(i,1));
         if LDAfit(i,1) == Test_lable(i)
             count = count + 1;
+        end
+        if p(i) < 0.8
+            Final_p(randTest).count = Final_p(randTest).count + 1;
+            Final_p(randTest).L_index(Final_p(randTest).count) = Random(i + TrTrial);
+            Final_overall(overall) = Random(i + TrTrial);
+            overall = overall + 1;
         end
     end
     
     Final_Accuracy_test(randTest)= count/TsTrial;
+    Final_p(randTest).v = p;
+    Final_p(randTest).ave = mean(p);
+    Final_p(randTest).m = min(p);
+
 end
 Final_mean_Test = mean(Final_Accuracy_test);
 Final_STD_Test = std2(Final_Accuracy_test);
+overall = overall - 1;
+Final_overall_c = zeros(1,3);
+for i = (1:overall)
+%     if Final_overall(i) > 100
+%         Final_overall(i) = Final_overall(i) - 100;
+%     end
+%     if Final_overall(i) > 100
+%         Final_overall(i) = Final_overall(i) - 100;
+%     end
+    lvl = ceil(Final_overall(i)/100);
+    Final_overall_c(lvl) = Final_overall_c(lvl) + 1;
+end
