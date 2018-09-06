@@ -11,30 +11,32 @@ state.device = false; % device connection?
 state.acquisition = false; % data acquisition on?
 changeup = onCleanup(@CleanUp);
 %% Paramaters:
-filename = 'Mahsa_Aug_30_18_test3';
+filename = 'Mahsa_Sept_1_18_test3';
 
 % config setting
 samplingRate = 500; % sampling frequency
 
-classNum = 2;       % amount of classes
-trialNum = 100;     % need to be a multiple of the amount of classes
-epochDuration = 3;  % durations are in seconds
-breakDuration = 2;
+classNum = 4;       % amount of classes
+trialNum = 200;     % need to be a multiple of the amount of classes
+epochDuration = 5;  % durations are in seconds
+breakDuration = 3;
+restPerT = 50; % after every restPerT trials there will be a long break(rest)
+restTime = 60; % the duration of the rest
 
 BandpassIndex = -1; % 47; % 36;
 NotchIndex = -1;    % 3;
 SensitivityIndex = 6;
 
 % image loading
-% img(1).file = imread('C4_LH.png');  img(1).name = 'LeftHand_4C';
-% img(2).file = imread('C4_RH.png');  img(2).name = 'RightHand_4C';
-% img(3).file = imread('C4_LF.png');  img(3).name = 'LeftFeet_4C';
-% img(4).file = imread('C4_RF.png');  img(4).name = 'RightFeet_4C';   
-% img(5).file = imread('C.png');      img(5).name = 'C';
-
-img(1).file = imread('C2_LH.png');  img(1).name = 'LeftHand_4C';
-img(2).file = imread('C2_RH.png');  img(2).name = 'RightHand_4C';
+img(1).file = imread('C4_LH.png');  img(1).name = 'LeftHand_4C';
+img(2).file = imread('C4_RH.png');  img(2).name = 'RightHand_4C';
+img(3).file = imread('C4_LF.png');  img(3).name = 'LeftFeet_4C';
+img(4).file = imread('C4_RF.png');  img(4).name = 'RightFeet_4C';   
 img(5).file = imread('C.png');      img(5).name = 'C';
+
+% img(1).file = imread('C2_LH.png');  img(1).name = 'LeftHand_4C';
+% img(2).file = imread('C2_RH.png');  img(2).name = 'RightHand_4C';
+% img(3).file = imread('C.png');      img(3).name = 'C';
 
 
 %% check validation of parameters
@@ -253,6 +255,15 @@ try % block 3
             sampleCurrent = sampleCurrent + scans_received;
         end
         
+        if mod(current_trial,restPerT)==0
+            tic
+            while toc < restTime
+                countDown = ceil(restTime - toc);
+                disp(countDown)
+                title(countDown)
+                pause(0.1)
+            end
+        end
     end
     close all;
     %% stop data acquisition
@@ -316,10 +327,10 @@ catch ME
     disp('Block 3');
     disp(ME.message);
     
-    gds_interface.StopDataAcquisition();
-    delete(gds_interface);
-    clear gds_interface;
-    clear gnautilus_config;
+%     gds_interface.StopDataAcquisition();
+%     delete(gds_interface);
+%     clear gds_interface;
+%     clear gnautilus_config;
     
     disp(ME.stack.line);
     return;
