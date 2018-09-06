@@ -92,7 +92,7 @@ gds_interface.StartDataAcquisition();
     cur = toc;  
     test = single(zeros(10,34));
     % wait for the inital garbage data to be cleared
-    for i = (5:-1:1)
+    for i = (0:-1:1)
         while(cur - pre <= 1)
             cur = toc;
             [scans_received, data] = gds_interface.GetData(0);
