@@ -78,6 +78,9 @@ for Total = (1:trials)
     
     %% update the recorder + a short break
     tic
+    if ~exist('../OnlineData','dir')
+        mkdir('../OnlineData')
+    end
     save(['../OnlineData/' name],'recorder');
     temp = breakTime - toc;
     if temp < 0

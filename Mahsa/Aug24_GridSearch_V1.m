@@ -1,23 +1,23 @@
 % Grid Search using all cores available
 clc;clear;
 
-spmd
+% spmd
     %% parameters
-    loaded = load('Will_Aug_27_18_prepro3.mat');
+    loaded = load('Mahsa_No_Hand_B_Sep06_prepro.mat');
 
-    TrTrial = 140;
-    TsTrial = 200 - TrTrial;
+    TrTrial = 70;
+    TsTrial = 100 - TrTrial;
     
     numClassifier = 1;
-    classifierNames = {['LDA_2Eig_V1'] ['LDA_4Eig_V1'] ['LDA_6Eig_V1'] };...%['LDA_8Eig_V1']...
+    classifierNames = {['LDA_2Eig_V1'] ['LDA_4Eig_V1'] ['LDA_6Eig_V1'] };
                       
-%                        ['SVM_2Eig_V1'] ['SVM_4Eig_V1'] ['SVM_6Eig_V1'] };...%['SVM_8Eig_V1']};
+%                        ['SVM_2Eig_V1'] ['SVM_4Eig_V1'] ['SVM_6Eig_V1'] };...
     %                        ['LR_2Eig_V1']  ['LR_4Eig_V1']  ['LR_6Eig_V1']...
-%  ['QDA_2Eig_V1'] ['QDA_4Eig_V1'] ['QDA_6Eig_V1'] ...%['QDA_8Eig_V1']...
+%  ['QDA_2Eig_V1'] ['QDA_4Eig_V1'] ['QDA_6Eig_V1'] ...
     Step = 100;
     
-    timeSample = 300;  % timeSamples within each epoch in raw data
-    numRand = 30;        % amount of experiments on different randoms
+    timeSample = 2500;  % timeSamples within each epoch in raw data
+    numRand = 15;        % amount of experiments on different randoms
     numFold = 10;       
     numClass = 2;
     numCh = 32; % number of channels
@@ -173,17 +173,17 @@ spmd
             end
 %         end
     end
-    if labindex > 1
-        labSend(info,1);
-    else 
-        for i = (2:numlabs)
-            new_info = labReceive(i);
-            info = info + new_info;
-        end
-        info = info / numlabs;
-    end
-    
-    disp('Done')
-end
-
-info_final = info{1};
+%     if labindex > 1
+%         labSend(info,1);
+%     else 
+%         for i = (2:numlabs)
+%             new_info = labReceive(i);
+%             info = info + new_info;
+%         end
+%         info = info / numlabs;
+%     end
+%     
+%     disp('Done')
+% end
+% 
+% info_final = info{1};

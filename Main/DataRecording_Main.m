@@ -11,16 +11,16 @@ state.device = false; % device connection?
 state.acquisition = false; % data acquisition on?
 changeup = onCleanup(@CleanUp);
 %% Paramaters:
-filename = 'Mahsa_Sept_1_18_test3';
+filename = 'Mahsa_No_Hand_B_Sep06_test1';
 
 % config setting
 samplingRate = 500; % sampling frequency
 
-classNum = 4;       % amount of classes
-trialNum = 200;     % need to be a multiple of the amount of classes
+classNum = 2;       % amount of classes
+trialNum = 100;     % need to be a multiple of the amount of classes
 epochDuration = 5;  % durations are in seconds
 breakDuration = 3;
-restPerT = 50; % after every restPerT trials there will be a long break(rest)
+restPerT = 101; % after every restPerT trials there will be a long break(rest)
 restTime = 60; % the duration of the rest
 
 BandpassIndex = -1; % 47; % 36;
@@ -28,15 +28,15 @@ NotchIndex = -1;    % 3;
 SensitivityIndex = 6;
 
 % image loading
-img(1).file = imread('C4_LH.png');  img(1).name = 'LeftHand_4C';
-img(2).file = imread('C4_RH.png');  img(2).name = 'RightHand_4C';
-img(3).file = imread('C4_LF.png');  img(3).name = 'LeftFeet_4C';
-img(4).file = imread('C4_RF.png');  img(4).name = 'RightFeet_4C';   
-img(5).file = imread('C.png');      img(5).name = 'C';
+% img(1).file = imread('C4_LH.png');  img(1).name = 'LeftHand_4C';
+% img(2).file = imread('C4_RH.png');  img(2).name = 'RightHand_4C';
+% img(3).file = imread('C4_LF.png');  img(3).name = 'LeftFeet_4C';
+% img(4).file = imread('C4_RF.png');  img(4).name = 'RightFeet_4C';   
+% img(5).file = imread('C.png');      img(5).name = 'C';
 
-% img(1).file = imread('C2_LH.png');  img(1).name = 'LeftHand_4C';
-% img(2).file = imread('C2_RH.png');  img(2).name = 'RightHand_4C';
-% img(3).file = imread('C.png');      img(3).name = 'C';
+imgC = imread('C.png');
+imgB = imread('Blank.png');
+
 
 
 %% check validation of parameters
@@ -45,12 +45,12 @@ if mod(trialNum,classNum) ~= 0
     error(['"trialNum"(' trialNum ') is not a mltiple of "classNum"(' classNum ').'])
 end
 
-% check if the amount stimuling image matches the amount of calsses
-if length(img) == classNum - 1 
-    error(['The amount of cue image does not match the amount of classes.\n'...
-        'The amount of image should equal to classNum + 1(the image of break).']);
-end
-imgB = length(img); % index of the image for break
+% % check if the amount stimuling image matches the amount of calsses
+% if length(img) == classNum - 1 
+%     error(['The amount of cue image does not match the amount of classes.\n'...
+%         'The amount of image should equal to classNum + 1(the image of break).']);
+% end
+% imgB = length(img); % index of the image for break
     
 %% Parameter Set up
 epochSamples = epochDuration * samplingRate;
@@ -188,7 +188,7 @@ try % block 3
     % 64-channel: data_received = single(zeros(2500, 66));
     data_received = single(zeros(totalSamples,35));
     close all;
-    image(img(imgB).file);
+    image(imgB);
     set(gcf, 'Position', get(0, 'Screensize'));
     
     %% Count Down & Buffer Clearing
@@ -226,8 +226,8 @@ try % block 3
     sampleCurrent = 0;  % current sample index
     for current_trial = (1:trialNum)
         % recording epoch
-        [~, ~] = gds_interface.GetData(0);
-        image(img(mark(1,current_trial)).file);
+%         [~, ~] = gds_interface.GetData(0);
+        image(imgC);
         
         title(current_trial);
         tic;
@@ -241,7 +241,7 @@ try % block 3
         end
         
         % recording break
-        image(img(imgB).file);
+        image(imgB);
         title(current_trial);
 %         drawnow();
         tic;
@@ -278,11 +278,13 @@ try % block 3
     estim_index = 1;
     bstim_index = 1;
     for i = (2:size(data_received,1))
-        if ((data_received(i-1,34) == 0 && data_received(i,34) ~= 0))
+        if ((data_received(i-1,34) ~= 0 && data_received(i,34) == 0))
+%         if ((data_received(i-1,34) == 0 && data_received(i,34) ~= 0))
             estim(estim_index) = i;
             estim_index = estim_index + 1;
         end
-        if ((data_received(i-1,34) ~= 0 && data_received(i,34) == 0))
+        if ((data_received(i-1,34) == 0 && data_received(i,34) ~= 0))
+%         if ((data_received(i-1,34) ~= 0 && data_received(i,34) == 0))
             bstim(bstim_index) = i;
             bstim_index = bstim_index + 1;
         end
@@ -294,6 +296,9 @@ try % block 3
     mark(2,:) = estim;
     mark(3,:) = bstim;
     
+    if ~exist('../Data','dir')
+        mkdir('../Data')
+    end
     save(filename,'data_received', 'mark', 'Description');
     
     batteryLVL = data_received(length(data_received),33);
