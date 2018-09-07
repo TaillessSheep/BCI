@@ -11,13 +11,13 @@ state.device = false; % device connection?
 state.acquisition = false; % data acquisition on?
 changeup = onCleanup(@CleanUp);
 %% Paramaters:
-filename = 'Mahsa_Sept_1_18_test3';
+filename = 'test';
 
 % config setting
 samplingRate = 500; % sampling frequency
 
 classNum = 4;       % amount of classes
-trialNum = 200;     % need to be a multiple of the amount of classes
+trialNum = 4;     % need to be a multiple of the amount of classes
 epochDuration = 5;  % durations are in seconds
 breakDuration = 3;
 restPerT = 50; % after every restPerT trials there will be a long break(rest)
@@ -186,7 +186,7 @@ try % block 3
     % 8-channel: data_received = single(zeros(2500, 10));
     % 16-channel: data_received = single(zeros(2500, 18));
     % 64-channel: data_received = single(zeros(2500, 66));
-    data_received = single(zeros(totalSamples,35));
+%     data_received = single(zeros(totalSamples,35));
     close all;
     image(img(imgB).file);
     set(gcf, 'Position', get(0, 'Screensize'));
@@ -294,6 +294,10 @@ try % block 3
     mark(2,:) = estim;
     mark(3,:) = bstim;
     
+    % create the folder if it does not exist
+    if ~exist('../Data','dir')
+        mkdir('../Data')
+    end
     save(filename,'data_received', 'mark', 'Description');
     
     batteryLVL = data_received(length(data_received),33);

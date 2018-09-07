@@ -17,10 +17,10 @@ filename = 'Mahsa_Sept_1_18_test3';
 samplingRate = 500; % sampling frequency
 
 classNum = 2;       % amount of classes
-trialNum = 4;     % need to be a multiple of the amount of classes
+trialNum = 2;     % need to be a multiple of the amount of classes
 preparationDuration = 1;
 cueDuration = 1.25;
-epochDuration = 4;  % durations are in seconds
+epochDuration = 3;  % durations are in seconds
 breakDuration = [2,3];
 restPerT = 50; % after every restPerT trials there will be a long break(rest)
 restTime = 60; % the duration of the rest
@@ -278,7 +278,6 @@ try % block 3
         
         % generate break time 
         BreakTime = breakDuration(1) + rand * (breakDuration(2)-breakDuration(1));
-        disp(BreakTime)
         % recording
         while toc <= BreakTime
             % read data
@@ -323,7 +322,7 @@ try % block 3
     end
     if length(estim) ~= trialNum %|| length(bstim) ~= trialNum
         error(['Amount of stimulating captured does not match trialNum.\nCaptured: '...
-            num2str(length(estim)) ';  trialNum: ' num2str(trialNum) ';']);
+            num2str(length(estim)) ';  trialNum: ' num2str(trialNum) ';' num2str(length(bstim))]);
     end
     mark(2,:) = estim;
     mark(3,:) = bstim;
