@@ -37,3 +37,6 @@
   - [X] Signal Classes -> Robot Task Commands
   - [X] Robot Task Scripts (Forward, turn left and turn right)
 
+
+
+* NOTE: Details about how to use the system can be found in Wiki.
