@@ -11,16 +11,17 @@ state.device = false; % device connection?
 state.acquisition = false; % data acquisition on?
 changeup = onCleanup(@CleanUp);
 %% Paramaters:
-filename = 'Mahsa_Sept_1_18_test3';
+filename = 'Mahsa_Sept_7_18_test5';
 
 % config setting
 samplingRate = 500; % sampling frequency
 
 classNum = 2;       % amount of classes
-trialNum = 4;     % need to be a multiple of the amount of classes
+trialNum = 100;     % need to be a multiple of the amount of classes
 preparationDuration = 1;
 cueDuration = 1.25;
 epochDuration = 4;  % durations are in seconds
+delayTime = 0.25;
 breakDuration = [2,3];
 restPerT = 50; % after every restPerT trials there will be a long break(rest)
 restTime = 60; % the duration of the rest
@@ -289,11 +290,14 @@ try % block 3
         end
         
         %% long break if needed
-        if mod(current_trial,restPerT)==0
+        if mod(current_trial,restPerT)==0 && current_trial~=trialNum
             tic
             while toc < restTime
                 countDown = ceil(restTime - toc);
-                disp(countDown)
+                [scans_received, data] = gds_interface.GetData(0);
+                data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
+                
+                sampleCurrent = sampleCurrent + scans_received;
                 title(countDown)
                 pause(0.1)
             end
@@ -322,6 +326,7 @@ try % block 3
         end
     end
     if length(estim) ~= trialNum %|| length(bstim) ~= trialNum
+        save([filename '_error'],'data_received', 'mark', 'Description');
         error(['Amount of stimulating captured does not match trialNum.\nCaptured: '...
             num2str(length(estim)) ';  trialNum: ' num2str(trialNum) ';']);
     end
@@ -375,5 +380,4 @@ catch ME
 end
 
 end
-
 
