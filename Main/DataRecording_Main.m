@@ -226,7 +226,11 @@ try % block 3
     sampleCurrent = 0;  % current sample index
     for current_trial = (1:trialNum)
         % recording epoch
+<<<<<<< HEAD
 %         [~, ~] = gds_interface.GetData(0);
+=======
+
+>>>>>>> 3da0b99966c76966319789a66e1836ade7faa63a
         image(img(mark(1,current_trial)).file);
         
         title(current_trial);
