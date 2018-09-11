@@ -38,6 +38,7 @@ count = 0;
 recorder.len = 0;
 recorder.timeSample = epochSamples;
 
+
 for Total = (1:trials)
 
     %% signal recording

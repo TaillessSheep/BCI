@@ -226,7 +226,6 @@ try % block 3
     sampleCurrent = 0;  % current sample index
     for current_trial = (1:trialNum)
         % recording epoch
-
         image(img(mark(1,current_trial)).file);
         
         title(current_trial);
@@ -235,7 +234,7 @@ try % block 3
             % read data
             
             [scans_received, data] = gds_interface.GetData(0);
-            data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
+            data_received((sampleCurrent + 1):(sampleCurrent + scans_received), :) = data;
             
             sampleCurrent = sampleCurrent + scans_received;
         end
