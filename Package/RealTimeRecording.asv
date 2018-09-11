@@ -43,14 +43,14 @@ while true
     
     if ~started
         for i = (1:size(data_received ,1))
-            if data_received(i,34) % if record while black ~
+            if ~data_received(i,34) % !need to chang if 
                 started = 1;
                 break
             end
         end
         if started
             for i = (1:size(data,1))
-                if data(i,34)      % if record while black ~
+                if ~data(i,34)
                     started = i;
                     break
                 end

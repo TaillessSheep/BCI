@@ -42,7 +42,7 @@ for Total = (1:trials)
 
     %% signal recording
     disp('Entered the for loop')
-    [data, mark] = RealTimeRecording(epochDuration,Total);
+    [data, mark] = RealTimeRecording(epochDuration,Total,labels(Total));
     disp('Data captured')
     len = size(data,1);
     recorder.mark(1,Total) = recorder.len + 1;
