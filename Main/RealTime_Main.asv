@@ -13,13 +13,13 @@ epochDuration = 0.4; % in seconds
 classifierName = 'Mahsa_classifer';
 trials = 4;
 breakTime = 2;
-% startShift = 0;
+startShift = 0;
 % config setting
 samplingRate = 500; % sampling frequency
 
-% BandpassIndex = -1; % 47; % 36;
-% NotchIndex = -1;    % 3;
-% SensitivityIndex = 6;
+BandpassIndex = -1; % 47; % 36;
+NotchIndex = -1;    % 3;
+SensitivityIndex = 6;
 
 % initiate arduino
 ard = arduino();
@@ -50,7 +50,6 @@ for Total = (1:trials)
     
     %% label from user
     label = user_label(ard);
-    recorder.label(Total) = label;
     
     %% signal recording
     disp('Entered the for loop')
