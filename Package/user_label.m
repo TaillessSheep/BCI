@@ -1,14 +1,11 @@
 function label = user_label(ard)
 
-
-writeDigitalPin(ard, 'D13', 0);
-
 writeDigitalPin(ard, 'D13', 1);
 L = 0;
 R = 0;
 while ~L && ~R
-    L = readDigitalPin(ard, 'D3');
-    R = readDigitalPin(ard, 'D4');
+    L = readDigitalPin(ard, 'D4');
+    R = readDigitalPin(ard, 'D5');
 end
 if ~xor(L,R)
     warning(['Both pins read ' num2str(L) '.'])

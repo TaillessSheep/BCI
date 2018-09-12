@@ -4,28 +4,28 @@
 function RealTime_Main()
 close all; clear; clc;
 % a state variable for clean up script to use
-global state wall_e
+global state wall_e imgC
 state.device = false; % device connection?
 state.acquisition = false; % data acquisition on?
 changeup = onCleanup(@CleanUp);
 %% parameters---------------------------------------------------------------
 epochDuration = 0.4; % in seconds
 classifierName = 'Mahsa_classifer';
-trials = 4;
+trials = 10;
 breakTime = 2;
 % startShift = 0;
 % config setting
 samplingRate = 500; % sampling frequency
 
-% BandpassIndex = -1; % 47; % 36;
-% NotchIndex = -1;    % 3;
-% SensitivityIndex = 6;
-
-% initiate arduino
-ard = arduino();
+probThreshold = 0.70;
 
 % name of ouput file (data recorded in this test)
 name = 'Mahsa_Sept_1_18_classifer_S5_Test4'; 
+
+% headset config
+BandpassIndex = -1; % 47; % 36;
+NotchIndex = -1;    % 3;
+SensitivityIndex = 6;
 
 %% preparation----------------------------------------------------------
 epochSamples = epochDuration * samplingRate;
@@ -33,6 +33,9 @@ epochSamples = epochDuration * samplingRate;
 load(classifierName);
 % labels = randGen(trials,2);
 
+% initiate arduino
+ard = arduino();
+writeDigitalPin(ard, 'D13', 0);
 %% initiate the headset
 InitiateDevice;
 pause(3)
@@ -41,16 +44,20 @@ count = 0;
 recorder.len = 0;
 recorder.timeSample = epochSamples;
 
-pauseTime = breakTime;  % pauseTime is the system pause time between each epoch
+% pauseTime = breakTime;  % pauseTime is the system pause time between each epoch
                         % it equals to breakTime - time taken to save data(calculated at 
                         % the end of the each epoch, but used at the begining of the next epoch)
 for Total = (1:trials)
-    %% system pause
-    pause(pauseTime);
-    
     %% label from user
+    title(Total)
+    drawnow
     label = user_label(ard);
+    
     recorder.label(Total) = label;
+    image(imgC)
+    title(Total)
+    %% system pause
+    pause(breakTime);
     
     %% signal recording
     disp('Entered the for loop')
@@ -70,15 +77,11 @@ for Total = (1:trials)
     data = data';
     
     %% signal classifing
-%     Arg_Ft_Ts = Wn'*data * data'*Wn;
-%     Ft_Ts= log ((diag(Arg_Ft_Ts))/trace(Arg_Ft_Ts));
-%     [command, prob] = Classifier.predictFcn(Ft_Ts');
-    
     [command, prob] = online_CSP(data, Wn, Classifier);
     
     recorder.pred(Total) = command;
     recorder.prob(Total) = prob;
-    if command == labels(Total)
+    if command == label
         count = count + 1;
     end
     disp('Classification done')
@@ -86,8 +89,10 @@ for Total = (1:trials)
 %     command = command + 1; % to adopt to two classes
     %% robot controlling
     
-    disp([num2str(labels(Total)) ': ' num2str(command)]); 
-    
+    disp([num2str(label) ': ' num2str(command)]); 
+    if prob < probThreshold
+        disp(['Certainty of the prediction is lower than the threshold: ' num2str(prob)])
+    end
     
 %     RobotControl(command);
     

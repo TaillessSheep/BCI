@@ -16,7 +16,7 @@ end
 
 % extra parameters
 samplingRate = 500;
-global gds_interface imgC imgBlank imgL imgR;
+global gds_interface imgC imgBlank imL imR;
 
 % clear the buffer
 for i = (1:10)
@@ -28,9 +28,9 @@ end
 
 % image(imgC);
 if label == 1
-    image(imgL)
+    image(imL)
 else
-    image(imgR)
+    image(imR)
 end
 title(To)
 started = 0;
@@ -38,31 +38,30 @@ currentSample = 0;
 while true
     [scans_received, data_received] = gds_interface.GetData(0);
     data(currentSample+1:currentSample+scans_received,:) = data_received;
-    
+    currentSample = currentSample + scans_received;
     % to find the starting point of stimuling
     
     if ~started
         for i = (1:size(data_received ,1))
             if data_received(i,34) % if record while black ~
-                started = currentSample + i;
+                started = i;
                 break
             end
         end
-%         if started
-%             for i = (1:size(data,1))
-%                 if data(i,34)      % if record while black ~
-%                     started = i;
-%                     break
-%                 end
-%             end
-%         end
+        if started
+            for i = (1:size(data,1))
+                if data(i,34)      % if record while black ~
+                    started = i;
+                    break
+                end
+            end
+        end
     end
-    currentSample = currentSample + scans_received;
     
     if started && currentSample - started >= samplingRate * duration
+        disp('what????')
         image(imgBlank)
         title(To)
-        drawnow
         break
     end
 end
