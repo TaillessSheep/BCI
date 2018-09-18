@@ -17,7 +17,7 @@ numClass = 2;
 % startShift = 0;
 
 % name of ouput file (data recorded in this test)
-name = 'Mahsa_Sept_1_18_classifer_S5_Test4'; 
+name = 'Mahsa_Sept_1_18_classifer_S5_Test4';
 
 % config setting
 samplingRate = 500; % sampling frequency
@@ -43,14 +43,14 @@ recorder.numClass = numClass;
 
 % clear the buffer
 for i = (1:10)
-[scans, ~] = gds_interface.GetData(0);
-if scans < 20 % if it has been clean enough
-    break
-end
+    [scans, ~] = gds_interface.GetData(0);
+    if scans < 20 % if it has been clean enough
+        break
+    end
 end
 
 while ture
-    if ChangeImg 
+    if ChangeImg
         if Break
             image(imgBlank);
         else
@@ -61,13 +61,13 @@ while ture
     if Break % if it is taking a break
         if toc < breakTime  % if the break is not done
             continue
-        else                % if the break is done 
+        else                % if the break is done
             Break = false;
             continue
         end
     else     % if it is recording
         
         
-end
-
+    end
+    
 end
