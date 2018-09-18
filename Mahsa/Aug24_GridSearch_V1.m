@@ -3,20 +3,21 @@ clc;clear;
 
 spmd
     %% parameters
-    loaded = load('Will_Aug_27_18_prepro3.mat');
+    loaded = load('Thy_Sept_17_18_prepro.mat');
 
-    TrTrial = 140;
-    TsTrial = 200 - TrTrial;
+    TrTrial = 210;
+    TsTrial = 300 - TrTrial;
     
-    numClassifier = 1;
-    classifierNames = {['LDA_2Eig_V1'] ['LDA_4Eig_V1'] ['LDA_6Eig_V1'] };...%['LDA_8Eig_V1']...
-                      
-%                        ['SVM_2Eig_V1'] ['SVM_4Eig_V1'] ['SVM_6Eig_V1'] };...%['SVM_8Eig_V1']};
+    numClassifier = 3;
+    classifierTypes = {'LDA' 'QDA' 'SVM'}; % 'LR'
+    classifierNames = {['LDA_2Eig_V1'] ['LDA_4Eig_V1'] ['LDA_6Eig_V1'] ...%['LDA_8Eig_V1']...
+                      ['QDA_2Eig_V1'] ['QDA_4Eig_V1'] ['QDA_6Eig_V1'] ...%['QDA_8Eig_V1']...
+                       ['SVM_2Eig_V1'] ['SVM_4Eig_V1'] ['SVM_6Eig_V1'] };%['SVM_8Eig_V1']};
     %                        ['LR_2Eig_V1']  ['LR_4Eig_V1']  ['LR_6Eig_V1']...
-%  ['QDA_2Eig_V1'] ['QDA_4Eig_V1'] ['QDA_6Eig_V1'] ...%['QDA_8Eig_V1']...
+%  
     Step = 100;
     
-    timeSample = 300;  % timeSamples within each epoch in raw data
+    timeSample = 1500;  % timeSamples within each epoch in raw data
     numRand = 30;        % amount of experiments on different randoms
     numFold = 10;       
     numClass = 2;
@@ -30,7 +31,7 @@ spmd
     if(mod(timeSample, Step) ~= 0)
         error("timeSample can not be divided by Step!")
     end
-    classifierTypes = {'LDA'};% 'SVM'}; % 'LR''QDA'
+    
     
     Trimming = (Step:Step:timeSample);
     
@@ -42,15 +43,18 @@ spmd
     
     addpath('./Classifier_functions')
 
-    
-    %% main    
+%     if labindex ~= 1
+%         info = zeros(numClassifier*max_eig,timeSample/Step,2);
+%     else
+%         info = zeros(numClassifier*max_eig,timeSample/Step,2);
+%     end
     for cType = (1:numClassifier) % type of classifiers: 'LDA' 'QDA' 'LR' 'SVM'
         if( labindex == 1)
             disp(classifierTypes{cType})
         end
         
-        numEig = 3;
-%         for numEig = (1:max_eig)
+%         numEig = 3;
+        for numEig = (1:max_eig)
             if( labindex == 1)
                 disp([' eig = ' num2str(numEig*2)])
             end
@@ -171,8 +175,9 @@ spmd
                 info(classifier_index,TrimIndex,1) = mean(Accuracy_CrsValidation_R.mean);
                 info(classifier_index,TrimIndex,2)  = mean(Accuracy_CrsValidation_R.std);
             end
-%         end
+        end
     end
+    disp('Done searching')
     if labindex > 1
         labSend(info,1);
     else 

@@ -1,0 +1,26 @@
+Run under 50 particles and 50 iterations:
+
+Subject 1: 18.63(4.82) max: 25.6
+Subject 2: 13.79(3.64) max: 18.57
+Subject 3: 7.19 (3.12) max: 12.5
+Subject 4: 93.63(0.92) max: 95
+Subject 5: 15.63(2.64) max: 18.75
+Subject 6: 49.5(11.62) max: 61.88
+Subject 7: 52.06(2.17) max: 55
+Subject 8: 77.94(1.06) max: 79.38
+Subject 9: 59.94(2.19) max: 62.5
+
+Average : 43.15  max: 47.69
+
+%----------------------------------------------------------
+45 iterations 40 particles
+
+Subject 1: 19.44 (5.64) max: 28.75
+Subject 2: 10.36 (2.19) max: 
+Subject 3: 7.31  (2.8)  max:
+Subject 4: 91.69 (2.21) max: 
+Subject 5: 19.56 (5.15) max:
+Subject 6: 44.94 (10.6) max: 
+Subject 7: 44.63 (3.44) max: 
+Subject 8: 77.31 (0.84) max:
+Subject 9: 61.94 (2.56) max:

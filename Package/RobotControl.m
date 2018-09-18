@@ -9,16 +9,16 @@ changeup = onCleanup(@CleanUp_Robot);
 resetRotation(leftMotor);
 resetRotation(rightMotor);
 
-if (command == 1)
-    LS = -77;
-    RS = -75;
-elseif(command == 2)
+if (command == 1) % turn left
     LS = 70;
     RS = -70;
-elseif(command == 3)
+elseif(command == 2) % turn right
     LS = -70;
-    RS = 70;
-elseif(command == 4)
+    RS = 70;    
+elseif(command == 3) % forward
+    LS = -77;
+    RS = -75;
+elseif(command == 4) % no mov
     LS = 0;
     RS = 0;
 else
@@ -29,10 +29,15 @@ end
 
 start(leftMotor, LS);
 start(rightMotor, RS);
-L = true;
-R = true;
+if ismember(command,[1,2,3])
+    L = true;
+    R = true;
+else
+    L = false;
+    R = false;
+end
 
-while L || R
+while L || R 
     if (abs(readRotation(leftMotor)) >= 390)
         stop (leftMotor);
         L = false;

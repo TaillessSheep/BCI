@@ -1,11 +1,11 @@
 %% Using Best Option that we got and applying on Train and TestSet
 clc; clear; close all;
 
-load('Mahsa_Aug_30_18_prepro');
+load('Thy_Sept_17_18_prepro');
 
 [numCh,TmSm,numTr] = size(data);
 
-Trimming = 250;
+Trimming = 1500;
 TrTrial = 210;
 TsTrial = numTr - TrTrial;
 

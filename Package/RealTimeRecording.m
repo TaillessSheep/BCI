@@ -3,19 +3,14 @@
 % This function will return a matrix of data with the specified duration(in
 % seconds) from the argument (default as 2 seconds)
 
-function [out_data, mark] = RealTimeRecording(duration,To,label)
+function [out_data, mark] = RealTimeRecording(epochSamples,To,label)
 
 global state
 state.device = true; % device connection?
 state.acquisition = true; % data acquisition on?
 
-% default case
-if nargin == 0
-    duration = 2;
-end
-
 % extra parameters
-samplingRate = 500;
+
 global gds_interface imgC imgBlank imgL imgR;
 
 % clear the buffer
@@ -59,8 +54,8 @@ while true
     end
     currentSample = currentSample + scans_received;
     
-    if started && currentSample - started >= samplingRate * duration
-        image(imgBlank)
+    if started && currentSample - started >= epochSamples
+        image(imgC)
         title(To)
         drawnow
         break

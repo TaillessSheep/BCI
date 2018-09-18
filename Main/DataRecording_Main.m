@@ -11,16 +11,18 @@ state.device = false; % device connection?
 state.acquisition = false; % data acquisition on?
 changeup = onCleanup(@CleanUp);
 %% Paramaters:
-filename = 'Mahsa_Sept_1_18_test3';
+% subjectName = 'Thy';
+% testNum = '2';
+filename = 'Thy_Sept_17_18_test2';
 
 % config setting
 samplingRate = 500; % sampling frequency
 
-classNum = 4;       % amount of classes
+classNum = 2;       % amount of classes
 trialNum = 200;     % need to be a multiple of the amount of classes
-epochDuration = 5;  % durations are in seconds
+epochDuration = 3;  % durations are in seconds
 breakDuration = 3;
-restPerT = 50; % after every restPerT trials there will be a long break(rest)
+restPerT = 30; % after every restPerT trials there will be a long break(rest)
 restTime = 60; % the duration of the rest
 
 BandpassIndex = -1; % 47; % 36;
@@ -28,15 +30,15 @@ NotchIndex = -1;    % 3;
 SensitivityIndex = 6;
 
 % image loading
-img(1).file = imread('C4_LH.png');  img(1).name = 'LeftHand_4C';
-img(2).file = imread('C4_RH.png');  img(2).name = 'RightHand_4C';
-img(3).file = imread('C4_LF.png');  img(3).name = 'LeftFeet_4C';
-img(4).file = imread('C4_RF.png');  img(4).name = 'RightFeet_4C';   
-img(5).file = imread('C.png');      img(5).name = 'C';
+% img(1).file = imread('C4_LH.png');  img(1).name = 'LeftHand_4C';
+% img(2).file = imread('C4_RH.png');  img(2).name = 'RightHand_4C';
+% img(3).file = imread('C4_LF.png');  img(3).name = 'LeftFeet_4C';
+% img(4).file = imread('C4_RF.png');  img(4).name = 'RightFeet_4C';   
+% img(5).file = imread('C.png');      img(5).name = 'C';
 
-% img(1).file = imread('C2_LH.png');  img(1).name = 'LeftHand_4C';
-% img(2).file = imread('C2_RH.png');  img(2).name = 'RightHand_4C';
-% img(3).file = imread('C.png');      img(3).name = 'C';
+img(1).file = imread('C2_LH.png');  img(1).name = 'LeftHand_4C';
+img(2).file = imread('C2_RH.png');  img(2).name = 'RightHand_4C';
+img(3).file = imread('C.png');      img(3).name = 'C';
 
 
 %% check validation of parameters
@@ -244,7 +246,7 @@ try % block 3
         title(current_trial);
 %         drawnow();
         tic;
-        while toc <= breakDuration+0.1
+        while toc <= breakDuration+rand
             % read data
             
             [scans_received, data] = gds_interface.GetData(0);
@@ -254,12 +256,17 @@ try % block 3
             sampleCurrent = sampleCurrent + scans_received;
         end
         
-        if mod(current_trial,restPerT)==0
+        if mod(current_trial,restPerT)==0 && current_trial ~= trialNum
             tic
             while toc < restTime
                 countDown = ceil(restTime - toc);
                 disp(countDown)
                 title(countDown)
+                [scans_received, data] = gds_interface.GetData(0);
+                data_received((sampleCurrent + 1) : (sampleCurrent + scans_received), :) = data;
+                clear data;
+                
+                sampleCurrent = sampleCurrent + scans_received;
                 pause(0.1)
             end
         end

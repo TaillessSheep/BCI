@@ -24,8 +24,8 @@ global gds_interface imgC imgBlank imgL imgR state;
 % loading images
 imgC = imread('C.png');
 imgBlank = imread('Blank.png');
-imgL = imread('C4_LH.png');
-imgR = imread('C4_RH.png');
+imgL = imread('C2_LH.png');
+imgR = imread('C2_RH.png');
 
 % create gtecDeviceInterface object
 
