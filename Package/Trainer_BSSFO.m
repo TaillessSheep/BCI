@@ -7,7 +7,7 @@ clc; clear; close all;
 % addpath(Address{4})
 name = 'Mahsa_Aug_30_18';
 
-Trimming = 250;
+Trimming = 750;
 
 load ([name '_prepro']);
 
@@ -16,7 +16,7 @@ data = data(:,1:Trimming,:);
 
 Labels = Labels-1;
 
-numRand = 10; % 10
+numRand = 3; % 10
 ctr = 1;
 while ctr <= numRand
     disp(ctr)

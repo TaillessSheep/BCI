@@ -9,7 +9,7 @@ load(name_prepro);
 % name = 'ha';
 % load('DataSet_Mahsa_Sep1st_2Feat.mat');
 % load('Labels_Mahsa_Sep1st_2feat.mat');
-Trimming = 750;
+Trimming = 250;
 numRand = 20;
 
 metric_mean = {'euclid','logeuclid','riemann','ld'};

@@ -6,7 +6,7 @@ name = 'Mahsa_Aug_30_18';
 name_prepro = [name '_prepro'];
 load(name_prepro);
 
-Trimming = 500;
+Trimming = 750;
 % TrTrial = 300;
 
 data = data(:,1:Trimming,:);
