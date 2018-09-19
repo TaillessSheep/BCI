@@ -3,7 +3,7 @@
 
 clc; clear; close all;
 %% parameters
-name = 'Thy_Sept_17_18';
+name = 'KunYi_Sept_19_18B';
 
 NumCh = 32;
 timeSample = 1500;
@@ -64,4 +64,5 @@ end
 data = DataSet(1:NumCh,:,:);
 save(name_save, 'data', 'Labels');
 disp(['Done! Preprocessed ' num2str(dataFiles_num) ' files.']);
+disp([num2str(length(Labels)) ' trials detected.'])
 

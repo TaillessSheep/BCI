@@ -3,7 +3,7 @@ clc;clear;
 
 spmd
     %% parameters
-    loaded = load('Thy_Sept_17_18_prepro.mat');
+    loaded = load('KunYi_Sept_19_18A_prepro.mat');
 
     TrTrial = 210;
     TsTrial = 300 - TrTrial;
@@ -15,10 +15,10 @@ spmd
                        ['SVM_2Eig_V1'] ['SVM_4Eig_V1'] ['SVM_6Eig_V1'] };%['SVM_8Eig_V1']};
     %                        ['LR_2Eig_V1']  ['LR_4Eig_V1']  ['LR_6Eig_V1']...
 %  
-    Step = 100;
+    Step = 250;
     
     timeSample = 1500;  % timeSamples within each epoch in raw data
-    numRand = 30;        % amount of experiments on different randoms
+    numRand = 2;        % amount of experiments on different randoms
     numFold = 10;       
     numClass = 2;
     numCh = 32; % number of channels
@@ -192,3 +192,4 @@ spmd
 end
 
 info_final = info{1};
+save ('KunYi_A', 'info_final')

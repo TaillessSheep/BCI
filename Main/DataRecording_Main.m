@@ -13,13 +13,13 @@ changeup = onCleanup(@CleanUp);
 %% Paramaters:
 % subjectName = 'Thy';
 % testNum = '2';
-filename = 'Thy_Sept_17_18_test2';
+filename = 'KunYi_Sept_19_18B_test1';
 
 % config setting
 samplingRate = 500; % sampling frequency
 
 classNum = 2;       % amount of classes
-trialNum = 200;     % need to be a multiple of the amount of classes
+trialNum = 300;     % need to be a multiple of the amount of classes
 epochDuration = 3;  % durations are in seconds
 breakDuration = 3;
 restPerT = 30; % after every restPerT trials there will be a long break(rest)
@@ -36,8 +36,8 @@ SensitivityIndex = 6;
 % img(4).file = imread('C4_RF.png');  img(4).name = 'RightFeet_4C';   
 % img(5).file = imread('C.png');      img(5).name = 'C';
 
-img(1).file = imread('C2_LH.png');  img(1).name = 'LeftHand_4C';
-img(2).file = imread('C2_RH.png');  img(2).name = 'RightHand_4C';
+img(1).file = imread('C2_LH_P1.png');  img(1).name = 'LeftHand_4C';
+img(2).file = imread('C2_RH_P1.png');  img(2).name = 'RightHand_4C';
 img(3).file = imread('C.png');      img(3).name = 'C';
 
 

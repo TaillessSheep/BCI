@@ -1,1 +1,5 @@
-Thy_Sept_17_18:		Actual movement
+Thy_Sept_17_18:		Actual movement (large movement; two different movement for the same side)
+
+KunYi_Sept_19_18A: 	Actual movement (small movement)
+
+KunYi_Sept_19_18A: 	Actual movement (large movement)
