@@ -11,7 +11,7 @@ state.acquisition = true; % data acquisition on?
 
 % extra parameters
 
-global gds_interface imgC imgW imgL imgR imgB;
+global gds_interface imgC imgBlank imgL imgR;
 
 % clear the buffer
 for i = (1:10)
@@ -21,15 +21,6 @@ if scans < 20
 end
 end
 
-if pIndex == 2
-    image(imgC)
-    tic;
-    while toc < 1.25
-        [~, ~] = gds_interface.GetData(0);
-        pause(0.04)
-    end
-end
-
 % image(imgC);
 if label == 1
     image(imgL)
@@ -37,14 +28,6 @@ else
     image(imgR)
 end
 title(To)
-if pIndex == 2
-    tic;
-    while toc < 1.25
-        [~, ~] = gds_interface.GetData(0);
-        pause(0.04)
-    end
-    image(imgW)
-end
 started = 0;
 currentSample = 0;
 while true
@@ -65,11 +48,7 @@ while true
     currentSample = currentSample + scans_received;
     
     if started && currentSample - started >= epochSamples
-        if pIndex == 1
-            image(imgC)
-        elseif pIndex == 2
-            image(imgB)
-        end
+        image(imgC)
         title(To)
         drawnow
         break
