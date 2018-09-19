@@ -22,10 +22,20 @@ Description.Sensitivity = supported_sensitivities(SensitivityIndex);
 %% gds_interface setup
 global gds_interface imgC imgBlank imgL imgR state;
 % loading images
+% imgC = imread('C.png');
+% imgBlank = imread('Blank.png');
+% imgL = imread('C2_LH.png');
+% imgR = imread('C2_RH.png');
 imgC = imread('C.png');
 imgBlank = imread('Blank.png');
-imgL = imread('C2_LH.png');
-imgR = imread('C2_RH.png');
+switch pIndex
+    case 1
+        imgL = imread('C2_LH_P1.png');
+        imgR = imread('C2_RH_P1.png');
+    case 2
+        imgL = imread('C2_LH_P2.png');
+        imgR = imread('C2_RH_P2.png');
+        ends
 
 % create gtecDeviceInterface object
 

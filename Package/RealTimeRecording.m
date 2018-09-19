@@ -3,7 +3,7 @@
 % This function will return a matrix of data with the specified duration(in
 % seconds) from the argument (default as 2 seconds)
 
-function [out_data, mark] = RealTimeRecording(epochSamples,To,label)
+function [out_data, mark] = RealTimeRecording(epochSamples,To,label, pIndex)
 
 global state
 state.device = true; % device connection?
