@@ -20,14 +20,15 @@ Description.Sensitivity = supported_sensitivities(SensitivityIndex);
 
 
 %% gds_interface setup
-global gds_interface imgC imgBlank imgL imgR state;
+global gds_interface imgC imgW imgL imgR state imgB;
 % loading images
 % imgC = imread('C.png');
-% imgBlank = imread('Blank.png');
+% imgW = imread('Blank.png');
 % imgL = imread('C2_LH.png');
 % imgR = imread('C2_RH.png');
 imgC = imread('C.png');
-imgBlank = imread('Blank.png');
+imgW = imread('White.png');
+imgB = imread('Black.png');
 switch pIndex
     case 1
         imgL = imread('C2_LH_P1.png');
@@ -35,7 +36,7 @@ switch pIndex
     case 2
         imgL = imread('C2_LH_P2.png');
         imgR = imread('C2_RH_P2.png');
-        ends
+end
 
 % create gtecDeviceInterface object
 
@@ -125,5 +126,5 @@ pause(2);
 
 % opening window for cue image
 close all;
-image(imgBlank);
+image(imgW);
 set(gcf, 'Position', get(0, 'Screensize'));

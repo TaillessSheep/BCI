@@ -4,7 +4,7 @@
 function RealTime_Main()
 close all; clear all; clc;
 % a state variable for clean up script to use
-global state wall_e imgC recorder name
+global state wall_e imgC recorder name imgW
 state.device = false; % device connection?
 state.acquisition = false; % data acquisition on?
 changeup = onCleanup(@CleanUp_online);
@@ -57,7 +57,11 @@ for Total = (1:trials)
     label = labels(Total);
     
     recorder.label(Total) = label;
-    image(imgC)
+%     if pIndex == 1
+%         image(imgC)
+%     elseif pIndex == 2
+%         image(imgW)
+%     end
     title(Total)
     %% system pause
     pause(breakTime+rand);
