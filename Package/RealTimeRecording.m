@@ -23,6 +23,7 @@ end
 
 if pIndex == 2
     image(imgC)
+    title(To)
     tic;
     while toc < 1.25
         [~, ~] = gds_interface.GetData(0);

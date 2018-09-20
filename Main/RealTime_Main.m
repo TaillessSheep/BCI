@@ -12,10 +12,10 @@ changeup = onCleanup(@CleanUp_online);
 pIndex = 1; % index of protochl
 classifierName = 'Mahsa_Aug_30_18_classifier';
 methodName = {'CSP' 'Riem' 'BSSFO'}; % all the method of classifying
-mIndex = 1; % index of the method we want to use(the methods in the methodName)
-name = 'CSP_test20'; 
+mIndex = 2; % index of the method we want to use(the methods in the methodName)
+name = 'test'; 
 
-trials = 50;
+trials = 4;
 breakTime = 2;
 
 probThreshold = 0.70;
