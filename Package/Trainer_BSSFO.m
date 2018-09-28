@@ -111,7 +111,7 @@ disp(['The STD of performance '  'is = ' num2str(std(final))])
 BSS = BSS{i}; C = C{i}; X = X{i}; W = W{i}; W0 = W0{i};
 name_output = [name '_classifier_BSSFO'];
 save(['../Classifiers/' name_output], 'BSS', 'C', 'X', 'W', 'W0', 'accuracy', 'Trimming')
-disp(name_output)
+disp([name '_classifier'])
 % end
 % rmpath(Address{4})
 

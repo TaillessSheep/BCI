@@ -13,7 +13,7 @@ LabelOffset = 0;
 addpath('../main');
 % names for different files
 % prefix = [name '_test']; % prefix for data files need to be read
-prefix = name;
+prefix = [name '_test'];
 name_save = [name '_prepro'];% name of the file to save
 
 

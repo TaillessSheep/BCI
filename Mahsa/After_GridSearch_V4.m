@@ -93,6 +93,7 @@ for i= 2: Tr_C2
 end
 Ave_cov_Train_Class2= tempp/Tr_C2;
 
+
 %% We define the whitenning matrix base on 2 eigen value that we have     matrix=eig(c1+c2,c1)
 % base on 6 eigen value (4 stimulation)
 [V,D]=eig(Ave_cov_Train_Class1+Ave_cov_Train_Class2,Ave_cov_Train_Class1);

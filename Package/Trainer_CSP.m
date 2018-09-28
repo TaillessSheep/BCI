@@ -1,7 +1,7 @@
 %% Using Best Option that we got and applying on data and TestSet
 clc; clear; close all;
 
-name = 'Mahsa_Aug_30_18';
+name = 'KunYi_Sept_19_18B';
 %% loading the dataset
 name_prepro = [name '_prepro'];
 load(name_prepro);
@@ -75,4 +75,4 @@ Ft_Tr_Trainer= [ Ft_Tr;Labels]';
 [Classifier, acc] = LDA_6Eig_V1(Ft_Tr_Trainer);
 disp(['New classifier trained! ' 'With accuracy on train set: ' num2str(acc)])
 save(['../Classifiers/' name '_classifier_CSP'], 'Wn', 'Classifier', 'Trimming')
-disp([name '_classifer_CSP'])
+disp([name '_classifer'])

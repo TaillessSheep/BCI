@@ -65,7 +65,7 @@ disp('------------------------------------------------------------------');
 max_value = V2;
 max_index = [I2 I1(I2)];
 
-
+e
 metric_mean_opt = metric_mean;
 metric_mean = metric_mean{max_index(2)};
 metric_dist_opt = metric_dist;
@@ -76,4 +76,4 @@ name_output = [name '_classifier_Riem'];
 save(['../Classifiers/' name_output], 'covData', 'Labels', 'metric_mean', ...
      'metric_dist', 'metric_mean_opt', 'metric_dist_opt', 'max_value','Trimming');
  
-disp(name_output)
+disp([name '_classifier'])

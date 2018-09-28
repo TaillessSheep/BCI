@@ -13,7 +13,7 @@ changeup = onCleanup(@CleanUp);
 %% Paramaters:
 % subjectName = 'Thy';
 % testNum = '2';
-filename = 'KunYi_Sept_19_18B_test1';
+filename = 'Thy_Sept_19_18B_test1';
 
 % config setting
 samplingRate = 500; % sampling frequency
@@ -246,7 +246,7 @@ try % block 3
         title(current_trial);
 %         drawnow();
         tic;
-        while toc <= breakDuration+rand
+        while toc <= breakDuration %+rand
             % read data
             
             [scans_received, data] = gds_interface.GetData(0);
