@@ -3,7 +3,7 @@
 
 clc; clear; close all;
 %% parameters
-name = 'KunYi_Sept_19_18B';
+name = 'Thy_Sept_28_18';
 
 NumCh = 32;
 timeSample = 1500;
