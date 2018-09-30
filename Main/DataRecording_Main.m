@@ -18,15 +18,15 @@ changeup = onCleanup(@CleanUp);
 %% Paramaters:
 % subjectName = 'Thy';
 % testNum = '2';
-filename = 'Thy_Sept_28_18_test6';
+filename = 'test';
 
 % config setting
 samplingRate = 500; % sampling frequency
 
 classNum = 2;       % amount of classes
-trialNum = 100;     % need to be a multiple of the amount of classes
+trialNum = 500;     % need to be a multiple of the amount of classes
 epochDuration = 0.5;  % durations are in seconds
-breakDuration = 0.2;
+breakDuration = 0.5;
 restPerT = 999990; % after every restPerT trials there will be a long break(rest)
 restTime = 60; % the duration of the rest
 
@@ -237,7 +237,7 @@ try % block 3
         
         title(current_trial);
         tic;
-        while toc <= epochDuration+0.1
+        while toc <= epochDuration
             % read data
             
             [scans_received, data] = gds_interface.GetData(0);
@@ -295,25 +295,43 @@ try % block 3
         end
         if ((data_received(i-1,34) ~= 0 && data_received(i,34) == 0))
             bstim(bstim_index) = i;
+%             if bstim(bstim_index) - estim(estim_index-1) > round(epochDuration*500*2.2)
+%                 estim(estim_index) = 0;
+%                 estim_index = estim_index + 1;
+%                 bstim(bstim_index) = 0;
+%                 bstim_index = bstim_index + 1;
+%                 disp('ha')
+%             end
             bstim_index = bstim_index + 1;
         end
     end
+    
+    
     
     if (~exist('../Data'))
         mkdir('../Data')
     end
     
     if length(estim) ~= trialNum || length(bstim) ~= trialNum
-%         mark(2,:) = estim;
-%         mark(3,:) = bstim;
-        save([filename '_error'],'data_received', 'estim', 'Description');
+        figure()
+        t = data_received(:,34);
+        len = length(t);
+        sections = trialNum/100;
+        for i = (1:sections)
+            temp = t(round((i-1)*len/sections)+1:round(i*len/sections));
+            subplot(sections,1,i);
+            plot(temp)
+            axis('tight')
+        end
+        
+        save([filename '_error'],'data_received', 'estim','bstim', 'Description');
         error(['Amount of stimulating captured does not match trialNum.\nCaptured: '...
             num2str(length(estim)) ';  trialNum: ' num2str(trialNum) ';']);
         
     end
+
     mark(2,:) = estim;
     mark(3,:) = bstim;
-    
     save(filename,'data_received', 'mark', 'Description');
     
     batteryLVL = data_received(length(data_received),33);
@@ -337,13 +355,13 @@ try % block 3
             title((i-1)*4+j);
         end
     end
-%     figure('name','event');
-%     plot(rec_time,data_received(:,34));
+    
+
     clearvars -except filename;
-    load(filename);
+
     
 catch ME
-    close all;
+
     disp('Block 3');
     disp(ME.message);
     
